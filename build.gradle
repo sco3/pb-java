@@ -10,7 +10,6 @@ plugins {
     id "com.google.protobuf" version "0.9.4"
 }
 
-
 group = "sco3"
 version = "1.0.0-SNAPSHOT"
 
@@ -34,7 +33,7 @@ dependencies {
 protobuf {
     plugins {
         js {
-            path = '/home/dz/bin/protoc-gen-js'
+            path = getPluginPath('js')
         }
     }
     generateProtoTasks {
@@ -50,7 +49,7 @@ protobuf {
 }
 
 static def getPluginPath(name) {
-    def path = "which grpc_${name}_plugin".execute()
+    def path = "which protoc-gen-${name}".execute()
     path.waitFor()
     path = path.in.text.trim()
     return path
@@ -59,5 +58,4 @@ static def getPluginPath(name) {
 task run(type: JavaExec) {
     classpath sourceSets.main.runtimeClasspath
     mainClass = "sco3.TestPb"
-    //args "arg1", "arg2"
 }
