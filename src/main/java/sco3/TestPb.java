@@ -12,10 +12,12 @@ import sco3.Test.Hello;
 
 public class TestPb {
 	private static final String PB_FILE = "/tmp/a-hello.pb";
+	private static final String PYTHON_PB_FILE = "/tmp/a-hello-python.pb";
 
 	public static void main(String[] argv) throws IOException {
 		writeToFile();
 		readFromFile();
+		readFromPythonFile();
 	}
 
 	private static void readFromFile() throws IOException {
@@ -24,8 +26,18 @@ public class TestPb {
 		out.println("Data from file: " + PB_FILE + " -> [\n" + aHello + "]");
 	}
 
+	private static void readFromPythonFile() throws IOException {
+		if (Files.exists(get(PYTHON_PB_FILE))) {
+			byte[] b = readAllBytes(get(PYTHON_PB_FILE));
+			Hello aHello = Hello.parseFrom(b);
+			out.println("Data from python file: " + PB_FILE + " -> [\n" + aHello + "]");
+		} else {
+			out.println("Python file does not exist: " + PYTHON_PB_FILE);
+		}
+	}
+
 	private static void writeToFile() throws IOException {
-		Hello aHello = newBuilder().setName("asdf").build();
+		Hello aHello = newBuilder().setName("hello from java").build();
 		out.println("Data to save -> [\n" + aHello + "]");
 
 		byte[] b = aHello.toByteArray();
