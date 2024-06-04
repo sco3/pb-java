@@ -32,10 +32,18 @@ dependencies {
 }
 
 protobuf {
+    plugins {
+        js {
+            path = '/home/dz/bin/protoc-gen-js'
+        }
+    }
     generateProtoTasks {
         all().configureEach { task ->
             task.builtins {
                 python {}
+            }
+            task.plugins {
+                js {}
             }
         }
     }
