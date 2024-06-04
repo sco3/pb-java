@@ -29,3 +29,9 @@ dependencies {
     testImplementation "junit:junit:4.13.2"
     implementation "com.google.protobuf:protobuf-java:4.27.0"
 }
+
+task run(type: JavaExec) {
+  classpath sourceSets.main.runtimeClasspath
+  mainClass = "sco3.TestPb"
+  //args "arg1", "arg2"
+}
