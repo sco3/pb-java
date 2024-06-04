@@ -1,21 +1,22 @@
 buildscript {
     repositories {
         mavenCentral()
+        gradlePluginPortal()
     }
 }
 
 plugins {
-   id "java"
-   id "com.google.protobuf" version "0.9.4"
+    id "java"
+    id "com.google.protobuf" version "0.9.4"
 }
 
 
 group = "sco3"
 version = "1.0.0-SNAPSHOT"
 
-compileJava   {
-  sourceCompatibility = '21'
-  targetCompatibility = '21'
+compileJava {
+    sourceCompatibility = '21'
+    targetCompatibility = '21'
 }
 
 repositories {
@@ -30,8 +31,25 @@ dependencies {
     implementation "com.google.protobuf:protobuf-java:4.27.0"
 }
 
+protobuf {
+    generateProtoTasks {
+        all().configureEach { task ->
+            task.builtins {
+                python {}
+            }
+        }
+    }
+}
+
+static def getPluginPath(name) {
+    def path = "which grpc_${name}_plugin".execute()
+    path.waitFor()
+    path = path.in.text.trim()
+    return path
+}
+
 task run(type: JavaExec) {
-  classpath sourceSets.main.runtimeClasspath
-  mainClass = "sco3.TestPb"
-  //args "arg1", "arg2"
+    classpath sourceSets.main.runtimeClasspath
+    mainClass = "sco3.TestPb"
+    //args "arg1", "arg2"
 }
