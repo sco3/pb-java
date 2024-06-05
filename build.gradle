@@ -42,7 +42,10 @@ protobuf {
                 python {}
             }
             task.plugins {
-                js {}
+                js {
+                    option "import_style=commonjs"
+                    option "binary"
+                }
             }
         }
     }
