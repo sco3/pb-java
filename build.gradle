@@ -45,6 +45,7 @@ protobuf {
                 js {
                     option "import_style=commonjs"
                     option "binary"
+                    outputSubDir "../../../../../src/main/js/"
                 }
             }
         }
