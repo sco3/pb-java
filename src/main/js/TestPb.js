@@ -1,13 +1,11 @@
 
 
-var goog = require('google-protobuf')
-var testProto = require('./test_pb');
+const goog = require('google-protobuf')
+const testProto = require('./test_pb');
 
 const A_HELLO_PB = '/tmp/a-hello.pb'
 
 function main() {
-	//var h = new proto.sco3.Hello();
-	//h.setName("aha")
 	const fs = require('fs');
 	if (fs.existsSync(A_HELLO_PB)) {
 		var stats = fs.statSync(A_HELLO_PB);
@@ -19,7 +17,7 @@ function main() {
 			var buffer = Buffer.alloc(stats.size);
 			fs.read(fd, buffer, 0, stats.size, 0, function(err, num) {
 				var h = proto.sco3.Hello.deserializeBinary(buffer)
-				console.log(h);
+				console.log(h.getName());
 			});
 		});
 	}
