@@ -7,19 +7,16 @@ const A_HELLO_PB = '/tmp/a-hello.pb'
 
 function main() {
 	const fs = require('fs');
-	if (fs.existsSync(A_HELLO_PB)) {
+	try {
 		var stats = fs.statSync(A_HELLO_PB);
-		fs.open(A_HELLO_PB, 'r', function(status, fd) {
-			if (status) {
-				console.log(status.message);
-				return;
-			}
-			var buffer = Buffer.alloc(stats.size);
-			fs.read(fd, buffer, 0, stats.size, 0, function(err, num) {
-				var h = proto.sco3.Hello.deserializeBinary(buffer)
-				console.log(h.getName());
-			});
-		});
+		var fd = fs.openSync(A_HELLO_PB, 'r');
+		var buffer = Buffer.alloc(stats.size);
+		fs.readSync(fd, buffer, 0, stats.size, 0);
+		var h = proto.sco3.Hello.deserializeBinary(buffer);
+		console.log(h.getName());
+		console.log(h);
+	} catch (e) {
+		console.log("Problem: " + e);
 	}
 }
 

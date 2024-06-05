@@ -6,3 +6,6 @@
 .classpath
 .idea
 .pydevproject
+/gradle/
+/gradlew.bat
+/gradlew

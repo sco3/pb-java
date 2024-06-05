@@ -23,7 +23,7 @@ public class TestPb {
 	private static void readFromFile() throws IOException {
 		byte[] b = readAllBytes(get(PB_FILE));
 		Hello aHello = Hello.parseFrom(b);
-		out.println("Data from file: " + PB_FILE + " -> [\n" + aHello + "]");
+		out.println("Data from file: " + PB_FILE + " -> [\n" + aHello.getName() + "]");
 	}
 
 	private static void readFromPythonFile() throws IOException {
