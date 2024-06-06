@@ -63,3 +63,12 @@ task run(type: JavaExec) {
     classpath sourceSets.main.runtimeClasspath
     mainClass = "sco3.TestPb"
 }
+task runProtobufjsGen (type:Exec){
+     workingDir "${rootDir}"
+     commandLine 'pbjs', '-t', 'static-module', '-o', 'src/main/js/test_pbjs.js', 'src/main/proto/test.proto'
+     doLast {
+         println "Executed!"
+     }
+   
+}
+
