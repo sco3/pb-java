@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "google-protobuf": "^3.21.2"
+    "google-protobuf": "^3.21.2",
+    "protobuf.js": "^1.1.2"
   }
 }
