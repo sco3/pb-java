@@ -4,8 +4,9 @@ import test_pb2
 from typing import reveal_type, Any
 import inspect
 
+print (dir(test_pb2.Hello))
+
 test = test_pb2.Hello()
-reveal_type(test)
 test.name = 'hello from python'
 print(f"{test}")
 testString = test.SerializeToString()

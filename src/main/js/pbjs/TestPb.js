@@ -1,6 +1,6 @@
 
 
-const minimal = require('protobufjs')
+const minimal = require('protobufjs/minimal')
 const proto = require('./test_pbjs');
 
 const A_HELLO_PB = '/tmp/a-hello.pb'
