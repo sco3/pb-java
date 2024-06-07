@@ -1,0 +1,20 @@
+{
+	"exclude": {
+		"match_fields": [
+			"type",
+			"action"
+		],
+		"exclusions": [
+			"light.capture*"
+		]
+	},
+	"inform": {
+		"match_fields": [
+			"type",
+			"action"
+		],
+		"exclusions": [
+			"camera.measure*"
+		]
+	}
+}
