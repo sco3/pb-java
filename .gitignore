@@ -10,3 +10,4 @@
 /gradlew.bat
 /gradlew
 /poetry.lock
+**/__pycache__
