@@ -11,3 +11,4 @@
 /gradlew
 /poetry.lock
 **/__pycache__
+.pydevproject
