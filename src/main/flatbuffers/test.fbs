@@ -1,0 +1,8 @@
+namespace sco3fb;
+
+table Hello {
+        name: string;
+        size: uint;
+}
+
+root_type Hello;

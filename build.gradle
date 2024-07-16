@@ -8,6 +8,7 @@ buildscript {
 plugins {
     id "java"
     id "com.google.protobuf" version "0.9.4"
+    id "io.netifi.flatbuffers" version "1.0.7"
 }
 
 group = "sco3"
@@ -28,6 +29,7 @@ repositories {
 dependencies {
     testImplementation "junit:junit:4.13.2"
     implementation "com.google.protobuf:protobuf-java:4.27.0"
+	implementation 'com.google.flatbuffers:flatbuffers-java:23.5.26'
 }
 
 protobuf {
@@ -69,3 +71,32 @@ task runProtobufjsGen (type:Exec){
      commandLine 'pbjs', '-t', 'static-module', '-o', 'src/main/js/pbjs/test_pbjs.js', 'src/main/proto/test.proto'
 }
 
+task flatc(type: Exec) {
+    def flatc = "flatc"
+    def inputDir = file('src/main/flatbuffers')
+    def outputDir = file("${buildDir}/generated/source/proto/main/java")
+
+    inputs.dir inputDir
+    outputs.dir outputDir
+
+    doFirst {
+        outputDir.mkdirs()
+    }
+
+    commandLine flatc, '-o', outputDir, '--java', "${inputDir}/test.fbs"
+}
+
+task flatcpy(type: Exec) {
+    def flatc = "flatc"
+    def inputDir = file('src/main/flatbuffers')
+    def outputDir = file("${buildDir}/generated/source/proto/main/python")
+
+    inputs.dir inputDir
+    outputs.dir outputDir
+
+    doFirst {
+        outputDir.mkdirs()
+    }
+
+    commandLine flatc, '-o', outputDir, '--python', "${inputDir}/test.fbs"
+}
