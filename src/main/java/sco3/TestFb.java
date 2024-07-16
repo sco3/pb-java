@@ -3,6 +3,7 @@ package sco3;
 import static java.nio.file.Paths.get;
 
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.nio.file.Files;
 
 import com.google.flatbuffers.FlatBufferBuilder;
@@ -20,19 +21,25 @@ public class TestFb {
 	}
 
 	private static void readFromFile() throws IOException {
-//		byte[] b = readAllBytes(get(JAVA_FB_FILE));
-//		Hello aHello = Hello.parseFrom(b);
-//		out.println("Data from file: " + JAVA_FB_FILE + " -> [\n" + aHello.getName() + "]");
+		if (Files.exists(get(JAVA_FB_FILE))) {
+			byte[] b = Files.readAllBytes(get(JAVA_FB_FILE));
+			Hello hello = Hello.getRootAsHello(ByteBuffer.wrap(b));
+			System.out.println("" //
+					+ "From " + JAVA_FB_FILE + " " //
+					+ hello.name() + " " + hello.size()//
+			);
+		}
 	}
 
 	private static void readFromPythonFile() throws IOException {
-//		if (Files.exists(get(PYTHON_FB_FILE))) {
-//			byte[] b = readAllBytes(get(PYTHON_FB_FILE));
-//			Hello aHello = Hello.parseFrom(b);
-//			out.println("Data from python file: " + JAVA_FB_FILE + " -> [\n" + aHello + "]");
-//		} else {
-//			out.println("Python file does not exist: " + PYTHON_FB_FILE);
-//		}
+		if (Files.exists(get(PYTHON_FB_FILE))) {
+			byte[] b = Files.readAllBytes(get(PYTHON_FB_FILE));
+			Hello hello = Hello.getRootAsHello(ByteBuffer.wrap(b));
+			System.out.println("" //
+					+ "From " + PYTHON_FB_FILE + " " //
+					+ hello.name() + " " + hello.size()//
+			);
+		}
 	}
 
 	private static void writeToFile() throws IOException {
@@ -44,6 +51,7 @@ public class TestFb {
 		offset = Hello.endHello(bld);
 		bld.finish(offset);
 		byte[] buf = bld.sizedByteArray();
+
 		Files.write(get(JAVA_FB_FILE), buf);
 
 	}
