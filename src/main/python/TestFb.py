@@ -23,4 +23,4 @@ if os.path.exists(JAVA_FB):
     with open(JAVA_FB, "rb") as in_file:
         bytes = in_file.read()
         h = Hello.Hello.GetRootAs(bytes, 0)
-        print(h.Name().decode("utf-8"), h.Size())
+        print("From", JAVA_FB, h.Name().decode("utf-8"), h.Size())
