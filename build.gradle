@@ -74,7 +74,7 @@ task runProtobufjsGen (type:Exec){
 task flatc(type: Exec) {
     def flatc = "flatc"
     def inputDir = file('src/main/flatbuffers')
-    def outputDir = file("${buildDir}/generated/source/proto/main/java")
+    def outputDir = file("src/main/java")
 
     inputs.dir inputDir
     outputs.dir outputDir
