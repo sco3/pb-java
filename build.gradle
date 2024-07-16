@@ -89,7 +89,7 @@ task flatc(type: Exec) {
 task flatcpy(type: Exec) {
     def flatc = "flatc"
     def inputDir = file('src/main/flatbuffers')
-    def outputDir = file("${buildDir}/generated/source/proto/main/python")
+    def outputDir = file("src/main/python")
 
     inputs.dir inputDir
     outputs.dir outputDir

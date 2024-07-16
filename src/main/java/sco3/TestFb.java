@@ -1,18 +1,17 @@
 package sco3;
 
-import static java.lang.System.out;
-import static java.nio.file.Files.readAllBytes;
 import static java.nio.file.Paths.get;
-import sco3fb.Hello;
 
 import java.io.IOException;
 import java.nio.file.Files;
 
 import com.google.flatbuffers.FlatBufferBuilder;
 
+import sco3fb.Hello;
+
 public class TestFb {
-	private static final String JAVA_FB_FILE = "/tmp/java.fb";
-	private static final String PYTHON_FB_FILE = "/tmp/python.fb";
+	private static final String JAVA_FB_FILE = "/tmp/hello-java.fb";
+	private static final String PYTHON_FB_FILE = "/tmp/hello-python.fb";
 
 	public static void main(String[] argv) throws IOException {
 		writeToFile();

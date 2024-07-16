@@ -1,28 +1,27 @@
-#!/usr/bin/env python3
+#!/usr/bin/env -s poetry run python
 
-import sco3fb
+import os
+import sco3fb.Hello as Hello
 import flatbuffers
 
+PYTHON_FB = "/tmp/hello-python.fb"
+JAVA_FB = "/tmp/hello-java.fb"
 
 bld = flatbuffers.Builder(1024)
-sco3.Hello.HelloStart(bld)
-sco3.Hello.HelloAddName(bld, b"Hello from python!")
-sco3.Hello.HelloAddSize(bld, 315)
-hello = sco3.Hello.HelloEnd(bld)
-bld.Finish(hello)
-print(hello)
+name = bld.CreateString("Hello")
+Hello.Start(bld)
+Hello.AddName(bld, name)
+Hello.AddSize(bld, 314)
+offset: int = Hello.End(bld)
+h = bld.Finish(offset)
+buf = bld.Output()
 
-if False:
-    test = test_pb2.Hello()
-    test.name = "hello from python"
-    print(f"{test}")
-    testString = test.SerializeToString()
-    with open("/tmp/a-hello-python.pb", "wb") as out_file:
-        out_file.write(testString)
+with open(PYTHON_FB, "wb") as out_file:
+    out_file.write(buf)
 
-    with open("/tmp/a-hello.pb", "rb") as in_file:
+if os.path.exists(JAVA_FB):
+    with open(JAVA_FB, "rb") as in_file:
         bytes = in_file.read()
-        test2 = test_pb2.Hello()
-        test2.ParseFromString(bytes)
-        print(f"{test2}")
-        print(f"{test2.name}")
+        h = Hello.Hello.GetRootAs(bytes, 0)
+        print(h.Name().decode("utf-8"))
+        print(h.Size())
