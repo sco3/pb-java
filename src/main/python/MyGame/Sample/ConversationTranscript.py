@@ -4,13 +4,16 @@
 
 import flatbuffers
 from flatbuffers.compat import import_numpy
+from typing import Any
+from MyGame.Sample.ConversationItem import ConversationItem
+from typing import Optional
 np = import_numpy()
 
 class ConversationTranscript(object):
     __slots__ = ['_tab']
 
     @classmethod
-    def GetRootAs(cls, buf, offset=0):
+    def GetRootAs(cls, buf, offset: int = 0):
         n = flatbuffers.encode.Get(flatbuffers.packer.uoffset, buf, offset)
         x = ConversationTranscript()
         x.Init(buf, n + offset)
@@ -21,67 +24,66 @@ class ConversationTranscript(object):
         """This method is deprecated. Please switch to GetRootAs."""
         return cls.GetRootAs(buf, offset)
     # ConversationTranscript
-    def Init(self, buf, pos):
+    def Init(self, buf: bytes, pos: int):
         self._tab = flatbuffers.table.Table(buf, pos)
 
     # ConversationTranscript
-    def Id(self):
+    def Id(self) -> Optional[str]:
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
         if o != 0:
             return self._tab.String(o + self._tab.Pos)
         return None
 
     # ConversationTranscript
-    def Conversation(self, j):
+    def Conversation(self, j: int) -> Optional[ConversationItem]:
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
         if o != 0:
             x = self._tab.Vector(o)
             x += flatbuffers.number_types.UOffsetTFlags.py_type(j) * 4
             x = self._tab.Indirect(x)
-            from MyGame.Sample.ConversationItem import ConversationItem
             obj = ConversationItem()
             obj.Init(self._tab.Bytes, x)
             return obj
         return None
 
     # ConversationTranscript
-    def ConversationLength(self):
+    def ConversationLength(self) -> int:
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
         if o != 0:
             return self._tab.VectorLen(o)
         return 0
 
     # ConversationTranscript
-    def ConversationIsNone(self):
+    def ConversationIsNone(self) -> bool:
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
         return o == 0
 
-def ConversationTranscriptStart(builder):
+def ConversationTranscriptStart(builder: flatbuffers.Builder):
     builder.StartObject(2)
 
-def Start(builder):
+def Start(builder: flatbuffers.Builder):
     ConversationTranscriptStart(builder)
 
-def ConversationTranscriptAddId(builder, id):
+def ConversationTranscriptAddId(builder: flatbuffers.Builder, id: int):
     builder.PrependUOffsetTRelativeSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(id), 0)
 
-def AddId(builder, id):
+def AddId(builder: flatbuffers.Builder, id: int):
     ConversationTranscriptAddId(builder, id)
 
-def ConversationTranscriptAddConversation(builder, conversation):
+def ConversationTranscriptAddConversation(builder: flatbuffers.Builder, conversation: int):
     builder.PrependUOffsetTRelativeSlot(1, flatbuffers.number_types.UOffsetTFlags.py_type(conversation), 0)
 
-def AddConversation(builder, conversation):
+def AddConversation(builder: flatbuffers.Builder, conversation: int):
     ConversationTranscriptAddConversation(builder, conversation)
 
-def ConversationTranscriptStartConversationVector(builder, numElems):
+def ConversationTranscriptStartConversationVector(builder, numElems: int) -> int:
     return builder.StartVector(4, numElems, 4)
 
 def StartConversationVector(builder, numElems: int) -> int:
     return ConversationTranscriptStartConversationVector(builder, numElems)
 
-def ConversationTranscriptEnd(builder):
+def ConversationTranscriptEnd(builder: flatbuffers.Builder) -> int:
     return builder.EndObject()
 
-def End(builder):
+def End(builder: flatbuffers.Builder) -> int:
     return ConversationTranscriptEnd(builder)

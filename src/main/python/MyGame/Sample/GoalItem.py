@@ -4,13 +4,15 @@
 
 import flatbuffers
 from flatbuffers.compat import import_numpy
+from typing import Any
+from typing import Optional
 np = import_numpy()
 
 class GoalItem(object):
     __slots__ = ['_tab']
 
     @classmethod
-    def GetRootAs(cls, buf, offset=0):
+    def GetRootAs(cls, buf, offset: int = 0):
         n = flatbuffers.encode.Get(flatbuffers.packer.uoffset, buf, offset)
         x = GoalItem()
         x.Init(buf, n + offset)
@@ -21,43 +23,43 @@ class GoalItem(object):
         """This method is deprecated. Please switch to GetRootAs."""
         return cls.GetRootAs(buf, offset)
     # GoalItem
-    def Init(self, buf, pos):
+    def Init(self, buf: bytes, pos: int):
         self._tab = flatbuffers.table.Table(buf, pos)
 
     # GoalItem
-    def Id(self):
+    def Id(self) -> Optional[str]:
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
         if o != 0:
             return self._tab.String(o + self._tab.Pos)
         return None
 
     # GoalItem
-    def GoalDescription(self):
+    def GoalDescription(self) -> Optional[str]:
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
         if o != 0:
             return self._tab.String(o + self._tab.Pos)
         return None
 
-def GoalItemStart(builder):
+def GoalItemStart(builder: flatbuffers.Builder):
     builder.StartObject(2)
 
-def Start(builder):
+def Start(builder: flatbuffers.Builder):
     GoalItemStart(builder)
 
-def GoalItemAddId(builder, id):
+def GoalItemAddId(builder: flatbuffers.Builder, id: int):
     builder.PrependUOffsetTRelativeSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(id), 0)
 
-def AddId(builder, id):
+def AddId(builder: flatbuffers.Builder, id: int):
     GoalItemAddId(builder, id)
 
-def GoalItemAddGoalDescription(builder, goalDescription):
+def GoalItemAddGoalDescription(builder: flatbuffers.Builder, goalDescription: int):
     builder.PrependUOffsetTRelativeSlot(1, flatbuffers.number_types.UOffsetTFlags.py_type(goalDescription), 0)
 
-def AddGoalDescription(builder, goalDescription):
+def AddGoalDescription(builder: flatbuffers.Builder, goalDescription: int):
     GoalItemAddGoalDescription(builder, goalDescription)
 
-def GoalItemEnd(builder):
+def GoalItemEnd(builder: flatbuffers.Builder) -> int:
     return builder.EndObject()
 
-def End(builder):
+def End(builder: flatbuffers.Builder) -> int:
     return GoalItemEnd(builder)

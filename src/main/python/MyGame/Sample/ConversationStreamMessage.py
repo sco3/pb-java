@@ -4,13 +4,15 @@
 
 import flatbuffers
 from flatbuffers.compat import import_numpy
+from typing import Any
+from typing import Optional
 np = import_numpy()
 
 class ConversationStreamMessage(object):
     __slots__ = ['_tab']
 
     @classmethod
-    def GetRootAs(cls, buf, offset=0):
+    def GetRootAs(cls, buf, offset: int = 0):
         n = flatbuffers.encode.Get(flatbuffers.packer.uoffset, buf, offset)
         x = ConversationStreamMessage()
         x.Init(buf, n + offset)
@@ -21,7 +23,7 @@ class ConversationStreamMessage(object):
         """This method is deprecated. Please switch to GetRootAs."""
         return cls.GetRootAs(buf, offset)
     # ConversationStreamMessage
-    def Init(self, buf, pos):
+    def Init(self, buf: bytes, pos: int):
         self._tab = flatbuffers.table.Table(buf, pos)
 
     # ConversationStreamMessage
@@ -32,7 +34,7 @@ class ConversationStreamMessage(object):
         return 0
 
     # ConversationStreamMessage
-    def Content(self, j):
+    def Content(self, j: int):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
         if o != 0:
             a = self._tab.Vector(o)
@@ -47,40 +49,40 @@ class ConversationStreamMessage(object):
         return 0
 
     # ConversationStreamMessage
-    def ContentLength(self):
+    def ContentLength(self) -> int:
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
         if o != 0:
             return self._tab.VectorLen(o)
         return 0
 
     # ConversationStreamMessage
-    def ContentIsNone(self):
+    def ContentIsNone(self) -> bool:
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
         return o == 0
 
     # ConversationStreamMessage
-    def DateTime(self):
+    def DateTime(self) -> Optional[str]:
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
         if o != 0:
             return self._tab.String(o + self._tab.Pos)
         return None
 
     # ConversationStreamMessage
-    def SessionId(self):
+    def SessionId(self) -> Optional[str]:
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(10))
         if o != 0:
             return self._tab.String(o + self._tab.Pos)
         return None
 
     # ConversationStreamMessage
-    def SubscriberId(self):
+    def SubscriberId(self) -> Optional[str]:
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(12))
         if o != 0:
             return self._tab.String(o + self._tab.Pos)
         return None
 
     # ConversationStreamMessage
-    def ApplicationName(self):
+    def ApplicationName(self) -> Optional[str]:
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(14))
         if o != 0:
             return self._tab.String(o + self._tab.Pos)
@@ -94,100 +96,100 @@ class ConversationStreamMessage(object):
         return 0
 
     # ConversationStreamMessage
-    def Source(self):
+    def Source(self) -> Optional[str]:
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(18))
         if o != 0:
             return self._tab.String(o + self._tab.Pos)
         return None
 
     # ConversationStreamMessage
-    def Destination(self):
+    def Destination(self) -> Optional[str]:
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(20))
         if o != 0:
             return self._tab.String(o + self._tab.Pos)
         return None
 
     # ConversationStreamMessage
-    def DocSource(self):
+    def DocSource(self) -> Optional[str]:
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(22))
         if o != 0:
             return self._tab.String(o + self._tab.Pos)
         return None
 
-def ConversationStreamMessageStart(builder):
+def ConversationStreamMessageStart(builder: flatbuffers.Builder):
     builder.StartObject(10)
 
-def Start(builder):
+def Start(builder: flatbuffers.Builder):
     ConversationStreamMessageStart(builder)
 
-def ConversationStreamMessageAddSequenceNumber(builder, sequenceNumber):
+def ConversationStreamMessageAddSequenceNumber(builder: flatbuffers.Builder, sequenceNumber: int):
     builder.PrependInt32Slot(0, sequenceNumber, 0)
 
-def AddSequenceNumber(builder, sequenceNumber):
+def AddSequenceNumber(builder: flatbuffers.Builder, sequenceNumber: int):
     ConversationStreamMessageAddSequenceNumber(builder, sequenceNumber)
 
-def ConversationStreamMessageAddContent(builder, content):
+def ConversationStreamMessageAddContent(builder: flatbuffers.Builder, content: int):
     builder.PrependUOffsetTRelativeSlot(1, flatbuffers.number_types.UOffsetTFlags.py_type(content), 0)
 
-def AddContent(builder, content):
+def AddContent(builder: flatbuffers.Builder, content: int):
     ConversationStreamMessageAddContent(builder, content)
 
-def ConversationStreamMessageStartContentVector(builder, numElems):
+def ConversationStreamMessageStartContentVector(builder, numElems: int) -> int:
     return builder.StartVector(1, numElems, 1)
 
 def StartContentVector(builder, numElems: int) -> int:
     return ConversationStreamMessageStartContentVector(builder, numElems)
 
-def ConversationStreamMessageAddDateTime(builder, dateTime):
+def ConversationStreamMessageAddDateTime(builder: flatbuffers.Builder, dateTime: int):
     builder.PrependUOffsetTRelativeSlot(2, flatbuffers.number_types.UOffsetTFlags.py_type(dateTime), 0)
 
-def AddDateTime(builder, dateTime):
+def AddDateTime(builder: flatbuffers.Builder, dateTime: int):
     ConversationStreamMessageAddDateTime(builder, dateTime)
 
-def ConversationStreamMessageAddSessionId(builder, sessionId):
+def ConversationStreamMessageAddSessionId(builder: flatbuffers.Builder, sessionId: int):
     builder.PrependUOffsetTRelativeSlot(3, flatbuffers.number_types.UOffsetTFlags.py_type(sessionId), 0)
 
-def AddSessionId(builder, sessionId):
+def AddSessionId(builder: flatbuffers.Builder, sessionId: int):
     ConversationStreamMessageAddSessionId(builder, sessionId)
 
-def ConversationStreamMessageAddSubscriberId(builder, subscriberId):
+def ConversationStreamMessageAddSubscriberId(builder: flatbuffers.Builder, subscriberId: int):
     builder.PrependUOffsetTRelativeSlot(4, flatbuffers.number_types.UOffsetTFlags.py_type(subscriberId), 0)
 
-def AddSubscriberId(builder, subscriberId):
+def AddSubscriberId(builder: flatbuffers.Builder, subscriberId: int):
     ConversationStreamMessageAddSubscriberId(builder, subscriberId)
 
-def ConversationStreamMessageAddApplicationName(builder, applicationName):
+def ConversationStreamMessageAddApplicationName(builder: flatbuffers.Builder, applicationName: int):
     builder.PrependUOffsetTRelativeSlot(5, flatbuffers.number_types.UOffsetTFlags.py_type(applicationName), 0)
 
-def AddApplicationName(builder, applicationName):
+def AddApplicationName(builder: flatbuffers.Builder, applicationName: int):
     ConversationStreamMessageAddApplicationName(builder, applicationName)
 
-def ConversationStreamMessageAddMessageType(builder, messageType):
+def ConversationStreamMessageAddMessageType(builder: flatbuffers.Builder, messageType: int):
     builder.PrependInt8Slot(6, messageType, 0)
 
-def AddMessageType(builder, messageType):
+def AddMessageType(builder: flatbuffers.Builder, messageType: int):
     ConversationStreamMessageAddMessageType(builder, messageType)
 
-def ConversationStreamMessageAddSource(builder, source):
+def ConversationStreamMessageAddSource(builder: flatbuffers.Builder, source: int):
     builder.PrependUOffsetTRelativeSlot(7, flatbuffers.number_types.UOffsetTFlags.py_type(source), 0)
 
-def AddSource(builder, source):
+def AddSource(builder: flatbuffers.Builder, source: int):
     ConversationStreamMessageAddSource(builder, source)
 
-def ConversationStreamMessageAddDestination(builder, destination):
+def ConversationStreamMessageAddDestination(builder: flatbuffers.Builder, destination: int):
     builder.PrependUOffsetTRelativeSlot(8, flatbuffers.number_types.UOffsetTFlags.py_type(destination), 0)
 
-def AddDestination(builder, destination):
+def AddDestination(builder: flatbuffers.Builder, destination: int):
     ConversationStreamMessageAddDestination(builder, destination)
 
-def ConversationStreamMessageAddDocSource(builder, docSource):
+def ConversationStreamMessageAddDocSource(builder: flatbuffers.Builder, docSource: int):
     builder.PrependUOffsetTRelativeSlot(9, flatbuffers.number_types.UOffsetTFlags.py_type(docSource), 0)
 
-def AddDocSource(builder, docSource):
+def AddDocSource(builder: flatbuffers.Builder, docSource: int):
     ConversationStreamMessageAddDocSource(builder, docSource)
 
-def ConversationStreamMessageEnd(builder):
+def ConversationStreamMessageEnd(builder: flatbuffers.Builder) -> int:
     return builder.EndObject()
 
-def End(builder):
+def End(builder: flatbuffers.Builder) -> int:
     return ConversationStreamMessageEnd(builder)

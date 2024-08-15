@@ -4,13 +4,15 @@
 
 import flatbuffers
 from flatbuffers.compat import import_numpy
+from typing import Any
+from typing import Optional
 np = import_numpy()
 
 class ConversationItem(object):
     __slots__ = ['_tab']
 
     @classmethod
-    def GetRootAs(cls, buf, offset=0):
+    def GetRootAs(cls, buf, offset: int = 0):
         n = flatbuffers.encode.Get(flatbuffers.packer.uoffset, buf, offset)
         x = ConversationItem()
         x.Init(buf, n + offset)
@@ -21,43 +23,43 @@ class ConversationItem(object):
         """This method is deprecated. Please switch to GetRootAs."""
         return cls.GetRootAs(buf, offset)
     # ConversationItem
-    def Init(self, buf, pos):
+    def Init(self, buf: bytes, pos: int):
         self._tab = flatbuffers.table.Table(buf, pos)
 
     # ConversationItem
-    def Role(self):
+    def Role(self) -> Optional[str]:
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
         if o != 0:
             return self._tab.String(o + self._tab.Pos)
         return None
 
     # ConversationItem
-    def Content(self):
+    def Content(self) -> Optional[str]:
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
         if o != 0:
             return self._tab.String(o + self._tab.Pos)
         return None
 
-def ConversationItemStart(builder):
+def ConversationItemStart(builder: flatbuffers.Builder):
     builder.StartObject(2)
 
-def Start(builder):
+def Start(builder: flatbuffers.Builder):
     ConversationItemStart(builder)
 
-def ConversationItemAddRole(builder, role):
+def ConversationItemAddRole(builder: flatbuffers.Builder, role: int):
     builder.PrependUOffsetTRelativeSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(role), 0)
 
-def AddRole(builder, role):
+def AddRole(builder: flatbuffers.Builder, role: int):
     ConversationItemAddRole(builder, role)
 
-def ConversationItemAddContent(builder, content):
+def ConversationItemAddContent(builder: flatbuffers.Builder, content: int):
     builder.PrependUOffsetTRelativeSlot(1, flatbuffers.number_types.UOffsetTFlags.py_type(content), 0)
 
-def AddContent(builder, content):
+def AddContent(builder: flatbuffers.Builder, content: int):
     ConversationItemAddContent(builder, content)
 
-def ConversationItemEnd(builder):
+def ConversationItemEnd(builder: flatbuffers.Builder) -> int:
     return builder.EndObject()
 
-def End(builder):
+def End(builder: flatbuffers.Builder) -> int:
     return ConversationItemEnd(builder)

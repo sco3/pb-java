@@ -4,13 +4,17 @@
 
 import flatbuffers
 from flatbuffers.compat import import_numpy
+from typing import Any
+from MyGame.Sample.PhaseConnection import PhaseConnection
+from MyGame.Sample.PhaseNode import PhaseNode
+from typing import Optional
 np = import_numpy()
 
 class PhaseInformation(object):
     __slots__ = ['_tab']
 
     @classmethod
-    def GetRootAs(cls, buf, offset=0):
+    def GetRootAs(cls, buf, offset: int = 0):
         n = flatbuffers.encode.Get(flatbuffers.packer.uoffset, buf, offset)
         x = PhaseInformation()
         x.Init(buf, n + offset)
@@ -21,104 +25,102 @@ class PhaseInformation(object):
         """This method is deprecated. Please switch to GetRootAs."""
         return cls.GetRootAs(buf, offset)
     # PhaseInformation
-    def Init(self, buf, pos):
+    def Init(self, buf: bytes, pos: int):
         self._tab = flatbuffers.table.Table(buf, pos)
 
     # PhaseInformation
-    def StartPhaseId(self):
+    def StartPhaseId(self) -> Optional[str]:
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
         if o != 0:
             return self._tab.String(o + self._tab.Pos)
         return None
 
     # PhaseInformation
-    def PhaseNodes(self, j):
+    def PhaseNodes(self, j: int) -> Optional[PhaseNode]:
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
         if o != 0:
             x = self._tab.Vector(o)
             x += flatbuffers.number_types.UOffsetTFlags.py_type(j) * 4
             x = self._tab.Indirect(x)
-            from MyGame.Sample.PhaseNode import PhaseNode
             obj = PhaseNode()
             obj.Init(self._tab.Bytes, x)
             return obj
         return None
 
     # PhaseInformation
-    def PhaseNodesLength(self):
+    def PhaseNodesLength(self) -> int:
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
         if o != 0:
             return self._tab.VectorLen(o)
         return 0
 
     # PhaseInformation
-    def PhaseNodesIsNone(self):
+    def PhaseNodesIsNone(self) -> bool:
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
         return o == 0
 
     # PhaseInformation
-    def PhaseConnections(self, j):
+    def PhaseConnections(self, j: int) -> Optional[PhaseConnection]:
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
         if o != 0:
             x = self._tab.Vector(o)
             x += flatbuffers.number_types.UOffsetTFlags.py_type(j) * 4
             x = self._tab.Indirect(x)
-            from MyGame.Sample.PhaseConnection import PhaseConnection
             obj = PhaseConnection()
             obj.Init(self._tab.Bytes, x)
             return obj
         return None
 
     # PhaseInformation
-    def PhaseConnectionsLength(self):
+    def PhaseConnectionsLength(self) -> int:
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
         if o != 0:
             return self._tab.VectorLen(o)
         return 0
 
     # PhaseInformation
-    def PhaseConnectionsIsNone(self):
+    def PhaseConnectionsIsNone(self) -> bool:
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
         return o == 0
 
-def PhaseInformationStart(builder):
+def PhaseInformationStart(builder: flatbuffers.Builder):
     builder.StartObject(3)
 
-def Start(builder):
+def Start(builder: flatbuffers.Builder):
     PhaseInformationStart(builder)
 
-def PhaseInformationAddStartPhaseId(builder, startPhaseId):
+def PhaseInformationAddStartPhaseId(builder: flatbuffers.Builder, startPhaseId: int):
     builder.PrependUOffsetTRelativeSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(startPhaseId), 0)
 
-def AddStartPhaseId(builder, startPhaseId):
+def AddStartPhaseId(builder: flatbuffers.Builder, startPhaseId: int):
     PhaseInformationAddStartPhaseId(builder, startPhaseId)
 
-def PhaseInformationAddPhaseNodes(builder, phaseNodes):
+def PhaseInformationAddPhaseNodes(builder: flatbuffers.Builder, phaseNodes: int):
     builder.PrependUOffsetTRelativeSlot(1, flatbuffers.number_types.UOffsetTFlags.py_type(phaseNodes), 0)
 
-def AddPhaseNodes(builder, phaseNodes):
+def AddPhaseNodes(builder: flatbuffers.Builder, phaseNodes: int):
     PhaseInformationAddPhaseNodes(builder, phaseNodes)
 
-def PhaseInformationStartPhaseNodesVector(builder, numElems):
+def PhaseInformationStartPhaseNodesVector(builder, numElems: int) -> int:
     return builder.StartVector(4, numElems, 4)
 
 def StartPhaseNodesVector(builder, numElems: int) -> int:
     return PhaseInformationStartPhaseNodesVector(builder, numElems)
 
-def PhaseInformationAddPhaseConnections(builder, phaseConnections):
+def PhaseInformationAddPhaseConnections(builder: flatbuffers.Builder, phaseConnections: int):
     builder.PrependUOffsetTRelativeSlot(2, flatbuffers.number_types.UOffsetTFlags.py_type(phaseConnections), 0)
 
-def AddPhaseConnections(builder, phaseConnections):
+def AddPhaseConnections(builder: flatbuffers.Builder, phaseConnections: int):
     PhaseInformationAddPhaseConnections(builder, phaseConnections)
 
-def PhaseInformationStartPhaseConnectionsVector(builder, numElems):
+def PhaseInformationStartPhaseConnectionsVector(builder, numElems: int) -> int:
     return builder.StartVector(4, numElems, 4)
 
 def StartPhaseConnectionsVector(builder, numElems: int) -> int:
     return PhaseInformationStartPhaseConnectionsVector(builder, numElems)
 
-def PhaseInformationEnd(builder):
+def PhaseInformationEnd(builder: flatbuffers.Builder) -> int:
     return builder.EndObject()
 
-def End(builder):
+def End(builder: flatbuffers.Builder) -> int:
     return PhaseInformationEnd(builder)

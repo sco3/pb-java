@@ -4,13 +4,19 @@
 
 import flatbuffers
 from flatbuffers.compat import import_numpy
+from typing import Any
+from MyGame.Sample.ChecklistItem import ChecklistItem
+from MyGame.Sample.ConversationTranscript import ConversationTranscript
+from MyGame.Sample.MemoryModel import MemoryModel
+from MyGame.Sample.SentimentAnalysis import SentimentAnalysis
+from typing import Optional
 np = import_numpy()
 
 class UserModel(object):
     __slots__ = ['_tab']
 
     @classmethod
-    def GetRootAs(cls, buf, offset=0):
+    def GetRootAs(cls, buf, offset: int = 0):
         n = flatbuffers.encode.Get(flatbuffers.packer.uoffset, buf, offset)
         x = UserModel()
         x.Init(buf, n + offset)
@@ -21,57 +27,56 @@ class UserModel(object):
         """This method is deprecated. Please switch to GetRootAs."""
         return cls.GetRootAs(buf, offset)
     # UserModel
-    def Init(self, buf, pos):
+    def Init(self, buf: bytes, pos: int):
         self._tab = flatbuffers.table.Table(buf, pos)
 
     # UserModel
-    def CurrentUserPhase(self):
+    def CurrentUserPhase(self) -> Optional[str]:
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
         if o != 0:
             return self._tab.String(o + self._tab.Pos)
         return None
 
     # UserModel
-    def CurrentUserChecklist(self, j):
+    def CurrentUserChecklist(self, j: int) -> Optional[ChecklistItem]:
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
         if o != 0:
             x = self._tab.Vector(o)
             x += flatbuffers.number_types.UOffsetTFlags.py_type(j) * 4
             x = self._tab.Indirect(x)
-            from MyGame.Sample.ChecklistItem import ChecklistItem
             obj = ChecklistItem()
             obj.Init(self._tab.Bytes, x)
             return obj
         return None
 
     # UserModel
-    def CurrentUserChecklistLength(self):
+    def CurrentUserChecklistLength(self) -> int:
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
         if o != 0:
             return self._tab.VectorLen(o)
         return 0
 
     # UserModel
-    def CurrentUserChecklistIsNone(self):
+    def CurrentUserChecklistIsNone(self) -> bool:
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
         return o == 0
 
     # UserModel
-    def LastSessionSummary(self):
+    def LastSessionSummary(self) -> Optional[str]:
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
         if o != 0:
             return self._tab.String(o + self._tab.Pos)
         return None
 
     # UserModel
-    def ClientProfileAssessment(self):
+    def ClientProfileAssessment(self) -> Optional[str]:
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(10))
         if o != 0:
             return self._tab.String(o + self._tab.Pos)
         return None
 
     # UserModel
-    def NextSessionGoals(self):
+    def NextSessionGoals(self) -> Optional[str]:
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(12))
         if o != 0:
             return self._tab.String(o + self._tab.Pos)
@@ -85,7 +90,7 @@ class UserModel(object):
         return 0
 
     # UserModel
-    def LastRemovedChecklistItems(self, j):
+    def LastRemovedChecklistItems(self, j: int):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(16))
         if o != 0:
             a = self._tab.Vector(o)
@@ -93,14 +98,14 @@ class UserModel(object):
         return ""
 
     # UserModel
-    def LastRemovedChecklistItemsLength(self):
+    def LastRemovedChecklistItemsLength(self) -> int:
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(16))
         if o != 0:
             return self._tab.VectorLen(o)
         return 0
 
     # UserModel
-    def LastRemovedChecklistItemsIsNone(self):
+    def LastRemovedChecklistItemsIsNone(self) -> bool:
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(16))
         return o == 0
 
@@ -112,124 +117,121 @@ class UserModel(object):
         return False
 
     # UserModel
-    def Memories(self):
+    def Memories(self) -> Optional[MemoryModel]:
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(20))
         if o != 0:
             x = self._tab.Indirect(o + self._tab.Pos)
-            from MyGame.Sample.MemoryModel import MemoryModel
             obj = MemoryModel()
             obj.Init(self._tab.Bytes, x)
             return obj
         return None
 
     # UserModel
-    def ConversationTranscript(self):
+    def ConversationTranscript(self) -> Optional[ConversationTranscript]:
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(22))
         if o != 0:
             x = self._tab.Indirect(o + self._tab.Pos)
-            from MyGame.Sample.ConversationTranscript import ConversationTranscript
             obj = ConversationTranscript()
             obj.Init(self._tab.Bytes, x)
             return obj
         return None
 
     # UserModel
-    def SentimentAnalysis(self):
+    def SentimentAnalysis(self) -> Optional[SentimentAnalysis]:
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(24))
         if o != 0:
             x = self._tab.Indirect(o + self._tab.Pos)
-            from MyGame.Sample.SentimentAnalysis import SentimentAnalysis
             obj = SentimentAnalysis()
             obj.Init(self._tab.Bytes, x)
             return obj
         return None
 
-def UserModelStart(builder):
+def UserModelStart(builder: flatbuffers.Builder):
     builder.StartObject(11)
 
-def Start(builder):
+def Start(builder: flatbuffers.Builder):
     UserModelStart(builder)
 
-def UserModelAddCurrentUserPhase(builder, currentUserPhase):
+def UserModelAddCurrentUserPhase(builder: flatbuffers.Builder, currentUserPhase: int):
     builder.PrependUOffsetTRelativeSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(currentUserPhase), 0)
 
-def AddCurrentUserPhase(builder, currentUserPhase):
+def AddCurrentUserPhase(builder: flatbuffers.Builder, currentUserPhase: int):
     UserModelAddCurrentUserPhase(builder, currentUserPhase)
 
-def UserModelAddCurrentUserChecklist(builder, currentUserChecklist):
+def UserModelAddCurrentUserChecklist(builder: flatbuffers.Builder, currentUserChecklist: int):
     builder.PrependUOffsetTRelativeSlot(1, flatbuffers.number_types.UOffsetTFlags.py_type(currentUserChecklist), 0)
 
-def AddCurrentUserChecklist(builder, currentUserChecklist):
+def AddCurrentUserChecklist(builder: flatbuffers.Builder, currentUserChecklist: int):
     UserModelAddCurrentUserChecklist(builder, currentUserChecklist)
 
-def UserModelStartCurrentUserChecklistVector(builder, numElems):
+def UserModelStartCurrentUserChecklistVector(builder, numElems: int) -> int:
     return builder.StartVector(4, numElems, 4)
 
 def StartCurrentUserChecklistVector(builder, numElems: int) -> int:
     return UserModelStartCurrentUserChecklistVector(builder, numElems)
 
-def UserModelAddLastSessionSummary(builder, lastSessionSummary):
+def UserModelAddLastSessionSummary(builder: flatbuffers.Builder, lastSessionSummary: int):
     builder.PrependUOffsetTRelativeSlot(2, flatbuffers.number_types.UOffsetTFlags.py_type(lastSessionSummary), 0)
 
-def AddLastSessionSummary(builder, lastSessionSummary):
+def AddLastSessionSummary(builder: flatbuffers.Builder, lastSessionSummary: int):
     UserModelAddLastSessionSummary(builder, lastSessionSummary)
 
-def UserModelAddClientProfileAssessment(builder, clientProfileAssessment):
+def UserModelAddClientProfileAssessment(builder: flatbuffers.Builder, clientProfileAssessment: int):
     builder.PrependUOffsetTRelativeSlot(3, flatbuffers.number_types.UOffsetTFlags.py_type(clientProfileAssessment), 0)
 
-def AddClientProfileAssessment(builder, clientProfileAssessment):
+def AddClientProfileAssessment(builder: flatbuffers.Builder, clientProfileAssessment: int):
     UserModelAddClientProfileAssessment(builder, clientProfileAssessment)
 
-def UserModelAddNextSessionGoals(builder, nextSessionGoals):
+def UserModelAddNextSessionGoals(builder: flatbuffers.Builder, nextSessionGoals: int):
     builder.PrependUOffsetTRelativeSlot(4, flatbuffers.number_types.UOffsetTFlags.py_type(nextSessionGoals), 0)
 
-def AddNextSessionGoals(builder, nextSessionGoals):
+def AddNextSessionGoals(builder: flatbuffers.Builder, nextSessionGoals: int):
     UserModelAddNextSessionGoals(builder, nextSessionGoals)
 
-def UserModelAddLastObserverAccessTimestamp(builder, lastObserverAccessTimestamp):
+def UserModelAddLastObserverAccessTimestamp(builder: flatbuffers.Builder, lastObserverAccessTimestamp: int):
     builder.PrependInt64Slot(5, lastObserverAccessTimestamp, 0)
 
-def AddLastObserverAccessTimestamp(builder, lastObserverAccessTimestamp):
+def AddLastObserverAccessTimestamp(builder: flatbuffers.Builder, lastObserverAccessTimestamp: int):
     UserModelAddLastObserverAccessTimestamp(builder, lastObserverAccessTimestamp)
 
-def UserModelAddLastRemovedChecklistItems(builder, lastRemovedChecklistItems):
+def UserModelAddLastRemovedChecklistItems(builder: flatbuffers.Builder, lastRemovedChecklistItems: int):
     builder.PrependUOffsetTRelativeSlot(6, flatbuffers.number_types.UOffsetTFlags.py_type(lastRemovedChecklistItems), 0)
 
-def AddLastRemovedChecklistItems(builder, lastRemovedChecklistItems):
+def AddLastRemovedChecklistItems(builder: flatbuffers.Builder, lastRemovedChecklistItems: int):
     UserModelAddLastRemovedChecklistItems(builder, lastRemovedChecklistItems)
 
-def UserModelStartLastRemovedChecklistItemsVector(builder, numElems):
+def UserModelStartLastRemovedChecklistItemsVector(builder, numElems: int) -> int:
     return builder.StartVector(4, numElems, 4)
 
 def StartLastRemovedChecklistItemsVector(builder, numElems: int) -> int:
     return UserModelStartLastRemovedChecklistItemsVector(builder, numElems)
 
-def UserModelAddGoalReviewCheck(builder, goalReviewCheck):
+def UserModelAddGoalReviewCheck(builder: flatbuffers.Builder, goalReviewCheck: bool):
     builder.PrependBoolSlot(7, goalReviewCheck, 0)
 
-def AddGoalReviewCheck(builder, goalReviewCheck):
+def AddGoalReviewCheck(builder: flatbuffers.Builder, goalReviewCheck: bool):
     UserModelAddGoalReviewCheck(builder, goalReviewCheck)
 
-def UserModelAddMemories(builder, memories):
+def UserModelAddMemories(builder: flatbuffers.Builder, memories: int):
     builder.PrependUOffsetTRelativeSlot(8, flatbuffers.number_types.UOffsetTFlags.py_type(memories), 0)
 
-def AddMemories(builder, memories):
+def AddMemories(builder: flatbuffers.Builder, memories: int):
     UserModelAddMemories(builder, memories)
 
-def UserModelAddConversationTranscript(builder, conversationTranscript):
+def UserModelAddConversationTranscript(builder: flatbuffers.Builder, conversationTranscript: int):
     builder.PrependUOffsetTRelativeSlot(9, flatbuffers.number_types.UOffsetTFlags.py_type(conversationTranscript), 0)
 
-def AddConversationTranscript(builder, conversationTranscript):
+def AddConversationTranscript(builder: flatbuffers.Builder, conversationTranscript: int):
     UserModelAddConversationTranscript(builder, conversationTranscript)
 
-def UserModelAddSentimentAnalysis(builder, sentimentAnalysis):
+def UserModelAddSentimentAnalysis(builder: flatbuffers.Builder, sentimentAnalysis: int):
     builder.PrependUOffsetTRelativeSlot(10, flatbuffers.number_types.UOffsetTFlags.py_type(sentimentAnalysis), 0)
 
-def AddSentimentAnalysis(builder, sentimentAnalysis):
+def AddSentimentAnalysis(builder: flatbuffers.Builder, sentimentAnalysis: int):
     UserModelAddSentimentAnalysis(builder, sentimentAnalysis)
 
-def UserModelEnd(builder):
+def UserModelEnd(builder: flatbuffers.Builder) -> int:
     return builder.EndObject()
 
-def End(builder):
+def End(builder: flatbuffers.Builder) -> int:
     return UserModelEnd(builder)

@@ -4,13 +4,14 @@
 
 import flatbuffers
 from flatbuffers.compat import import_numpy
+from typing import Any
 np = import_numpy()
 
 class SentimentAnalysis(object):
     __slots__ = ['_tab']
 
     @classmethod
-    def GetRootAs(cls, buf, offset=0):
+    def GetRootAs(cls, buf, offset: int = 0):
         n = flatbuffers.encode.Get(flatbuffers.packer.uoffset, buf, offset)
         x = SentimentAnalysis()
         x.Init(buf, n + offset)
@@ -21,7 +22,7 @@ class SentimentAnalysis(object):
         """This method is deprecated. Please switch to GetRootAs."""
         return cls.GetRootAs(buf, offset)
     # SentimentAnalysis
-    def Init(self, buf, pos):
+    def Init(self, buf: bytes, pos: int):
         self._tab = flatbuffers.table.Table(buf, pos)
 
     # SentimentAnalysis
@@ -59,44 +60,44 @@ class SentimentAnalysis(object):
             return self._tab.Get(flatbuffers.number_types.Float64Flags, o + self._tab.Pos)
         return 0.0
 
-def SentimentAnalysisStart(builder):
+def SentimentAnalysisStart(builder: flatbuffers.Builder):
     builder.StartObject(5)
 
-def Start(builder):
+def Start(builder: flatbuffers.Builder):
     SentimentAnalysisStart(builder)
 
-def SentimentAnalysisAddCurrentSentiment(builder, currentSentiment):
+def SentimentAnalysisAddCurrentSentiment(builder: flatbuffers.Builder, currentSentiment: float):
     builder.PrependFloat64Slot(0, currentSentiment, 0.0)
 
-def AddCurrentSentiment(builder, currentSentiment):
+def AddCurrentSentiment(builder: flatbuffers.Builder, currentSentiment: float):
     SentimentAnalysisAddCurrentSentiment(builder, currentSentiment)
 
-def SentimentAnalysisAddTrendingSentiment(builder, trendingSentiment):
+def SentimentAnalysisAddTrendingSentiment(builder: flatbuffers.Builder, trendingSentiment: float):
     builder.PrependFloat64Slot(1, trendingSentiment, 0.0)
 
-def AddTrendingSentiment(builder, trendingSentiment):
+def AddTrendingSentiment(builder: flatbuffers.Builder, trendingSentiment: float):
     SentimentAnalysisAddTrendingSentiment(builder, trendingSentiment)
 
-def SentimentAnalysisAddTotalSentiment(builder, totalSentiment):
+def SentimentAnalysisAddTotalSentiment(builder: flatbuffers.Builder, totalSentiment: float):
     builder.PrependFloat64Slot(2, totalSentiment, 0.0)
 
-def AddTotalSentiment(builder, totalSentiment):
+def AddTotalSentiment(builder: flatbuffers.Builder, totalSentiment: float):
     SentimentAnalysisAddTotalSentiment(builder, totalSentiment)
 
-def SentimentAnalysisAddMessageCount(builder, messageCount):
+def SentimentAnalysisAddMessageCount(builder: flatbuffers.Builder, messageCount: float):
     builder.PrependFloat64Slot(3, messageCount, 0.0)
 
-def AddMessageCount(builder, messageCount):
+def AddMessageCount(builder: flatbuffers.Builder, messageCount: float):
     SentimentAnalysisAddMessageCount(builder, messageCount)
 
-def SentimentAnalysisAddAverageSentiment(builder, averageSentiment):
+def SentimentAnalysisAddAverageSentiment(builder: flatbuffers.Builder, averageSentiment: float):
     builder.PrependFloat64Slot(4, averageSentiment, 0.0)
 
-def AddAverageSentiment(builder, averageSentiment):
+def AddAverageSentiment(builder: flatbuffers.Builder, averageSentiment: float):
     SentimentAnalysisAddAverageSentiment(builder, averageSentiment)
 
-def SentimentAnalysisEnd(builder):
+def SentimentAnalysisEnd(builder: flatbuffers.Builder) -> int:
     return builder.EndObject()
 
-def End(builder):
+def End(builder: flatbuffers.Builder) -> int:
     return SentimentAnalysisEnd(builder)

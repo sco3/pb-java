@@ -4,13 +4,15 @@
 
 import flatbuffers
 from flatbuffers.compat import import_numpy
+from typing import Any
+from typing import Optional
 np = import_numpy()
 
 class MemoryField(object):
     __slots__ = ['_tab']
 
     @classmethod
-    def GetRootAs(cls, buf, offset=0):
+    def GetRootAs(cls, buf, offset: int = 0):
         n = flatbuffers.encode.Get(flatbuffers.packer.uoffset, buf, offset)
         x = MemoryField()
         x.Init(buf, n + offset)
@@ -21,32 +23,32 @@ class MemoryField(object):
         """This method is deprecated. Please switch to GetRootAs."""
         return cls.GetRootAs(buf, offset)
     # MemoryField
-    def Init(self, buf, pos):
+    def Init(self, buf: bytes, pos: int):
         self._tab = flatbuffers.table.Table(buf, pos)
 
     # MemoryField
-    def FieldName(self):
+    def FieldName(self) -> Optional[str]:
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
         if o != 0:
             return self._tab.String(o + self._tab.Pos)
         return None
 
     # MemoryField
-    def Description(self):
+    def Description(self) -> Optional[str]:
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
         if o != 0:
             return self._tab.String(o + self._tab.Pos)
         return None
 
     # MemoryField
-    def Content(self):
+    def Content(self) -> Optional[str]:
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
         if o != 0:
             return self._tab.String(o + self._tab.Pos)
         return None
 
     # MemoryField
-    def ContextWords(self, j):
+    def ContextWords(self, j: int):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(10))
         if o != 0:
             a = self._tab.Vector(o)
@@ -54,55 +56,55 @@ class MemoryField(object):
         return ""
 
     # MemoryField
-    def ContextWordsLength(self):
+    def ContextWordsLength(self) -> int:
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(10))
         if o != 0:
             return self._tab.VectorLen(o)
         return 0
 
     # MemoryField
-    def ContextWordsIsNone(self):
+    def ContextWordsIsNone(self) -> bool:
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(10))
         return o == 0
 
-def MemoryFieldStart(builder):
+def MemoryFieldStart(builder: flatbuffers.Builder):
     builder.StartObject(4)
 
-def Start(builder):
+def Start(builder: flatbuffers.Builder):
     MemoryFieldStart(builder)
 
-def MemoryFieldAddFieldName(builder, fieldName):
+def MemoryFieldAddFieldName(builder: flatbuffers.Builder, fieldName: int):
     builder.PrependUOffsetTRelativeSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(fieldName), 0)
 
-def AddFieldName(builder, fieldName):
+def AddFieldName(builder: flatbuffers.Builder, fieldName: int):
     MemoryFieldAddFieldName(builder, fieldName)
 
-def MemoryFieldAddDescription(builder, description):
+def MemoryFieldAddDescription(builder: flatbuffers.Builder, description: int):
     builder.PrependUOffsetTRelativeSlot(1, flatbuffers.number_types.UOffsetTFlags.py_type(description), 0)
 
-def AddDescription(builder, description):
+def AddDescription(builder: flatbuffers.Builder, description: int):
     MemoryFieldAddDescription(builder, description)
 
-def MemoryFieldAddContent(builder, content):
+def MemoryFieldAddContent(builder: flatbuffers.Builder, content: int):
     builder.PrependUOffsetTRelativeSlot(2, flatbuffers.number_types.UOffsetTFlags.py_type(content), 0)
 
-def AddContent(builder, content):
+def AddContent(builder: flatbuffers.Builder, content: int):
     MemoryFieldAddContent(builder, content)
 
-def MemoryFieldAddContextWords(builder, contextWords):
+def MemoryFieldAddContextWords(builder: flatbuffers.Builder, contextWords: int):
     builder.PrependUOffsetTRelativeSlot(3, flatbuffers.number_types.UOffsetTFlags.py_type(contextWords), 0)
 
-def AddContextWords(builder, contextWords):
+def AddContextWords(builder: flatbuffers.Builder, contextWords: int):
     MemoryFieldAddContextWords(builder, contextWords)
 
-def MemoryFieldStartContextWordsVector(builder, numElems):
+def MemoryFieldStartContextWordsVector(builder, numElems: int) -> int:
     return builder.StartVector(4, numElems, 4)
 
 def StartContextWordsVector(builder, numElems: int) -> int:
     return MemoryFieldStartContextWordsVector(builder, numElems)
 
-def MemoryFieldEnd(builder):
+def MemoryFieldEnd(builder: flatbuffers.Builder) -> int:
     return builder.EndObject()
 
-def End(builder):
+def End(builder: flatbuffers.Builder) -> int:
     return MemoryFieldEnd(builder)

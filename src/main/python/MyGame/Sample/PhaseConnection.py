@@ -4,13 +4,15 @@
 
 import flatbuffers
 from flatbuffers.compat import import_numpy
+from typing import Any
+from typing import Optional
 np = import_numpy()
 
 class PhaseConnection(object):
     __slots__ = ['_tab']
 
     @classmethod
-    def GetRootAs(cls, buf, offset=0):
+    def GetRootAs(cls, buf, offset: int = 0):
         n = flatbuffers.encode.Get(flatbuffers.packer.uoffset, buf, offset)
         x = PhaseConnection()
         x.Init(buf, n + offset)
@@ -21,56 +23,56 @@ class PhaseConnection(object):
         """This method is deprecated. Please switch to GetRootAs."""
         return cls.GetRootAs(buf, offset)
     # PhaseConnection
-    def Init(self, buf, pos):
+    def Init(self, buf: bytes, pos: int):
         self._tab = flatbuffers.table.Table(buf, pos)
 
     # PhaseConnection
-    def ConnectionId(self):
+    def ConnectionId(self) -> Optional[str]:
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
         if o != 0:
             return self._tab.String(o + self._tab.Pos)
         return None
 
     # PhaseConnection
-    def PrevPhaseId(self):
+    def PrevPhaseId(self) -> Optional[str]:
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
         if o != 0:
             return self._tab.String(o + self._tab.Pos)
         return None
 
     # PhaseConnection
-    def NextPhaseId(self):
+    def NextPhaseId(self) -> Optional[str]:
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
         if o != 0:
             return self._tab.String(o + self._tab.Pos)
         return None
 
-def PhaseConnectionStart(builder):
+def PhaseConnectionStart(builder: flatbuffers.Builder):
     builder.StartObject(3)
 
-def Start(builder):
+def Start(builder: flatbuffers.Builder):
     PhaseConnectionStart(builder)
 
-def PhaseConnectionAddConnectionId(builder, connectionId):
+def PhaseConnectionAddConnectionId(builder: flatbuffers.Builder, connectionId: int):
     builder.PrependUOffsetTRelativeSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(connectionId), 0)
 
-def AddConnectionId(builder, connectionId):
+def AddConnectionId(builder: flatbuffers.Builder, connectionId: int):
     PhaseConnectionAddConnectionId(builder, connectionId)
 
-def PhaseConnectionAddPrevPhaseId(builder, prevPhaseId):
+def PhaseConnectionAddPrevPhaseId(builder: flatbuffers.Builder, prevPhaseId: int):
     builder.PrependUOffsetTRelativeSlot(1, flatbuffers.number_types.UOffsetTFlags.py_type(prevPhaseId), 0)
 
-def AddPrevPhaseId(builder, prevPhaseId):
+def AddPrevPhaseId(builder: flatbuffers.Builder, prevPhaseId: int):
     PhaseConnectionAddPrevPhaseId(builder, prevPhaseId)
 
-def PhaseConnectionAddNextPhaseId(builder, nextPhaseId):
+def PhaseConnectionAddNextPhaseId(builder: flatbuffers.Builder, nextPhaseId: int):
     builder.PrependUOffsetTRelativeSlot(2, flatbuffers.number_types.UOffsetTFlags.py_type(nextPhaseId), 0)
 
-def AddNextPhaseId(builder, nextPhaseId):
+def AddNextPhaseId(builder: flatbuffers.Builder, nextPhaseId: int):
     PhaseConnectionAddNextPhaseId(builder, nextPhaseId)
 
-def PhaseConnectionEnd(builder):
+def PhaseConnectionEnd(builder: flatbuffers.Builder) -> int:
     return builder.EndObject()
 
-def End(builder):
+def End(builder: flatbuffers.Builder) -> int:
     return PhaseConnectionEnd(builder)
