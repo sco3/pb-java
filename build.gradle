@@ -101,4 +101,6 @@ task flatcpy(type: Exec) {
     }
 
     commandLine flatc, '-o', outputDir, '--python', "${inputDir}/test.fbs"
+    commandLine flatc, '-o', outputDir, '--python', "${inputDir}/cstream.fbs"
+
 }
