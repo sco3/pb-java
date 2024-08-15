@@ -44,6 +44,7 @@ protobuf {
                 python {}
             }
             task.plugins {
+                mypy {}
                 js {
                     option "import_style=commonjs"
                     option "binary"
