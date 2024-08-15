@@ -1,15 +1,19 @@
+import time
+from typing import ClassVar
 import unittest
 
 import flatbuffers
-from MyGame.Sample.ComponentType import ComponentType
-from MyGame.Sample import ConversationStreamMessage as csm
-from MyGame.Sample.ConversationStreamMessage import ConversationStreamMessage
-from typing import ClassVar
 from numpy import ndarray
+
+from MyGame.Sample import ConversationStreamMessage as csm
+from MyGame.Sample.ComponentType import ComponentType
+from MyGame.Sample.ConversationStreamMessage import ConversationStreamMessage
 
 
 class TestSerDe(unittest.TestCase):
     CSTREAM_BIN: ClassVar[str] = "/tmp/cstream.bin"
+    file_result: bool = False
+    buf: bytes = b""
 
     def test_01_create_conversation_stream_message(self) -> None:
         builder = flatbuffers.Builder(1024)
@@ -43,12 +47,19 @@ class TestSerDe(unittest.TestCase):
         builder.Finish(message)
         buf: bytes = builder.Output()
 
-        with open(TestSerDe.CSTREAM_BIN, "wb") as f:
-            f.write(buf)
+        if TestSerDe.file_result:
+            with open(TestSerDe.CSTREAM_BIN, "wb") as f:
+                f.write(buf)
+        else:
+            TestSerDe.buf = buf
 
     def test_02_read_conversation_stream_message(self) -> None:
-        with open(TestSerDe.CSTREAM_BIN, "rb") as f:
-            buf: bytes = f.read()
+        buf: bytes = []
+        if TestSerDe.file_result:
+            with open(TestSerDe.CSTREAM_BIN, "rb") as f:
+                buf = f.read()
+        else:
+            buf = TestSerDe.buf
 
         msg: ConversationStreamMessage = (
             ConversationStreamMessage.GetRootAsConversationStreamMessage(buf, 0)
@@ -84,5 +95,21 @@ class TestSerDe(unittest.TestCase):
         assert doc_source == "doc_source"
 
 
+def run_many(n: int) -> None:
+    test: TestSerDe = TestSerDe()
+    start: int = time.time_ns()
+    for _ in range(n):
+        test.test_01_create_conversation_stream_message()
+        test.test_02_read_conversation_stream_message()
+
+    took: int = (time.time_ns() - start) // 1_000_000
+    print(
+        f"Took: {took} ms {1000*n/took} msg/s "
+        f" message size:{len(TestSerDe.buf)}"
+    )
+
+
 if __name__ == "__main__":
+    run_many(100_000)
+    TestSerDe.file_result = True
     unittest.main()
