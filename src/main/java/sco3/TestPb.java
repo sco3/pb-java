@@ -8,6 +8,8 @@ import static sco3.Test.Hello.newBuilder;
 import java.io.IOException;
 import java.nio.file.Files;
 
+import com.google.protobuf.Any;
+
 import sco3.Test.Hello;
 
 public class TestPb {
@@ -37,7 +39,10 @@ public class TestPb {
 	}
 
 	private static void writeToFile() throws IOException {
-		Hello aHello = newBuilder().setName("hello from java").build();
+		Hello nested = newBuilder().setName("Nested").build();
+		Hello aHello = newBuilder() //
+				.setName("hello from java")//
+				.setContent(Any.pack(nested)).build();
 		out.println("Data to save -> [\n" + aHello + "]");
 
 		byte[] b = aHello.toByteArray();

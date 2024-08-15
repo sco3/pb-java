@@ -85,6 +85,7 @@ task flatc(type: Exec) {
     }
 
     commandLine flatc, '-o', outputDir, '--java', "${inputDir}/test.fbs"
+    commandLine flatc, '-o', outputDir, '--java', "${inputDir}/cstream.fbs"
 }
 
 task flatcpy(type: Exec) {

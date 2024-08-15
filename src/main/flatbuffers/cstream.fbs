@@ -1,0 +1,96 @@
+namespace MyGame.Sample;
+
+table SentimentAnalysis {
+    current_sentiment: double;
+    trending_sentiment: double;
+    total_sentiment: double;
+    message_count: double;
+    average_sentiment: double;
+}
+
+enum ComponentType: byte {
+    COMPONENT = 0,
+    LLM_AGENT = 1,
+    API = 2
+}
+
+table ConversationItem {
+    role: string;
+    content: string;
+}
+
+table ConversationTranscript {
+    id: string;
+    conversation: [ConversationItem];
+}
+
+table ChecklistItem {
+    id: string;  // UUID
+    name: string;
+    description: string;
+    next_session_goal: string;
+}
+
+table GoalItem {
+    id: string;  // UUID
+    goal_description: string;
+}
+
+table PhaseNode {
+    id: string;  // UUID
+    name: string;
+    goals: [GoalItem];
+    checklist: [ChecklistItem];
+}
+
+table PhaseConnection {
+    connection_id: string;  // UUID
+    prev_phase_id: string;  // UUID
+    next_phase_id: string;  // UUID
+}
+
+table PhaseInformation {
+    start_phase_id: string;  // UUID
+    phase_nodes: [PhaseNode];
+    phase_connections: [PhaseConnection];
+}
+
+table MemoryField {
+    field_name: string;
+    description: string;
+    content: string;
+    context_words: [string];
+}
+
+table MemoryModel {
+    memory_fields: [MemoryField];
+}
+
+table UserModel {
+    current_user_phase: string;
+    current_user_checklist: [ChecklistItem];
+    last_session_summary: string;
+    client_profile_assessment: string;
+    next_session_goals: string;
+    last_observer_access_timestamp: long;  // Timestamp
+    last_removed_checklist_items: [string];
+    goal_review_check: bool;
+    memories: MemoryModel;
+    conversation_transcript: ConversationTranscript;
+    sentiment_analysis: SentimentAnalysis;
+}
+
+table ConversationStreamMessage {
+    sequence_number: int;
+    content: [ubyte];  //  any
+    date_time: string;
+    session_id: string;
+    subscriber_id: string;
+    application_name: string;
+    message_type: ComponentType;
+    source: string;
+    destination: string;
+    doc_source: string;
+}
+
+root_type ConversationStreamMessage;

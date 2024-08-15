@@ -10,5 +10,6 @@
 /gradlew.bat
 /gradlew
 /poetry.lock
+/dist
 **/__pycache__
 .pydevproject
