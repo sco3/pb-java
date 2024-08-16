@@ -4,9 +4,7 @@ version = "0.1.0"
 description = ""
 authors = []
 
-packages = [
-    { include = "sco3", from = "src/main/python"  }
-]
+packages = [{ include = "sco3", from = "src/main/python" }]
 
 
 [tool.poetry.dependencies]
@@ -17,9 +15,8 @@ protobuf = "^5.27.3"
 mypy-protobuf = "^3.6.0"
 mypy = "^1.11.1"
 numpy = "^2.0.1"
-
-
-
+msgpack = "^1.0.8"
+pytest = "^8.3.2"
 
 
 [build-system]

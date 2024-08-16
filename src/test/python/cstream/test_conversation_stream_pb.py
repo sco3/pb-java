@@ -7,6 +7,8 @@ from google.protobuf.wrappers_pb2 import BytesValue
 from google.protobuf.wrappers_pb2 import BytesValue
 from google.protobuf.any_pb2 import Any
 
+import msgpack
+
 from conversationstream.protobuf.api_pb2 import ConversationStreamMessage
 
 
@@ -21,7 +23,9 @@ class TestSerDePb(unittest.TestCase):
         csm: ConversationStreamMessage = ConversationStreamMessage()
         csm.sequence_number = i
 
-        content_bytes = BytesValue(value=b"\x01\x02\x03")
+        bbuf: bytes = bytearray(150)
+        bbuf[1] = i % 127
+        content_bytes = BytesValue(value=bytes(bbuf))
         any_value: Any = Any()
         any_value.Pack(content_bytes)
         csm.content.CopyFrom(any_value)
@@ -48,7 +52,10 @@ class TestSerDePb(unittest.TestCase):
 
         # Access the actual bytes from BytesValue
         bytes_content: bytes = bytes_value.value
-        assert bytes_content == b"\x01\x02\x03"
+        bbuf: bytes = bytearray(150)
+        bbuf[1] = i % 127
+
+        assert bytes_content == bytes(bbuf)
 
         date_time: str = msg.date_time
         assert date_time == "2024-08-15T12:34:56Z"
@@ -71,6 +78,11 @@ class TestSerDePb(unittest.TestCase):
         doc_source: str = msg.doc_source
         assert doc_source == f"doc_source{i}"
 
+#    def test_03_read_conversation_stream_message(self, i: int = 0) -> None:
+#        msg: ConversationStreamMessage = ConversationStreamMessage()
+#        msg.ParseFromString(TestSerDePb.buf)
+#        packed_data = msgpack.packb(msg)
+
 
 def run_many(n: int) -> None:
     test: TestSerDePb = TestSerDePb()
@@ -87,6 +99,6 @@ def run_many(n: int) -> None:
 
 
 if __name__ == "__main__":
-    run_many(100_000)
+    run_many(1_000_000)
     TestSerDePb.file_result = True
     unittest.main()

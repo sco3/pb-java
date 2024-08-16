@@ -3,4 +3,4 @@
 
 
 
-poetry run pytest src/test/python/test_conversation_stream.TestSerDe
+poetry run python -m pytest src/test/python/
