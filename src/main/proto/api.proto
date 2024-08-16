@@ -1,0 +1,100 @@
+syntax = "proto3";
+
+import "google/protobuf/any.proto";
+import "google/protobuf/timestamp.proto";
+
+
+message SentimentAnalysis {
+    double current_sentiment = 1;
+    double trending_sentiment = 2;
+    double total_sentiment = 3;
+    double message_count = 4;
+    double average_sentiment = 5;
+}
+
+
+enum ComponentType {
+    COMPONENT = 0;
+    LLM_AGENT = 1;
+    API = 2;
+}
+
+// Messages
+message ConversationItem {
+    string role = 1;
+    string content = 2;
+}
+
+message ConversationTranscript {
+    string id = 1;
+    repeated ConversationItem conversation = 2;
+}
+
+message ChecklistItem {
+    string id = 1;  // UUID
+    string name = 2;
+    string description = 3;
+    string next_session_goal = 4;
+}
+
+message GoalItem {
+    string id = 1;  // UUID
+    string goal_description = 2;
+}
+
+message PhaseNode {
+    string id = 1;  // UUID
+    string name = 2;
+    repeated GoalItem goals = 3;
+    repeated ChecklistItem checklist = 4;
+}
+
+message PhaseConnection {
+    string connection_id = 1;  // UUID
+    string prev_phase_id = 2;  // UUID
+    string next_phase_id = 3;  // UUID
+}
+
+message PhaseInformation {
+    string start_phase_id = 1;  // UUID
+    repeated PhaseNode phase_nodes = 2;
+    repeated PhaseConnection phase_connections = 3;
+}
+
+message MemoryField {
+    string field_name = 1;
+    string description = 2;
+    string content = 3;
+    repeated string context_words = 4;
+}
+
+message MemoryModel {
+    repeated MemoryField memory_fields = 1;
+}
+
+message UserModel {
+    string current_user_phase = 1;
+    repeated ChecklistItem current_user_checklist = 2;
+    string last_session_summary = 3;
+    string client_profile_assessment = 4;
+    string next_session_goals = 5;
+    int64 last_observer_access_timestamp = 6;  // Timestamp
+    repeated string last_removed_checklist_items = 7;
+    bool goal_review_check = 8;
+    MemoryModel memories = 9;
+    optional ConversationTranscript conversation_transcript = 10;
+    optional SentimentAnalysis sentiment_analysis = 11;
+}
+
+message ConversationStreamMessage {
+    int32 sequence_number = 1;
+    google.protobuf.Any content = 2;
+    string date_time = 3;
+    string session_id = 4;
+    string subscriber_id = 5;
+    string application_name = 6;
+    ComponentType message_type = 7;
+    string source = 8;
+    string destination = 9;
+    string doc_source = 10;
+}
