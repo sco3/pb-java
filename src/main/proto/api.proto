@@ -2,7 +2,7 @@ syntax = "proto3";
 
 import "google/protobuf/any.proto";
 import "google/protobuf/timestamp.proto";
-
+package conversationstream.protobuf;
 
 message SentimentAnalysis {
     double current_sentiment = 1;
