@@ -1,6 +1,7 @@
 import time
 from typing import ClassVar
 import unittest
+from conversationstream.protobuf.api_pb2 import ConversationStreamMessage
 
 
 class TestSerDe(unittest.TestCase):
