@@ -10,3 +10,6 @@ class TestSerDe(unittest.TestCase):
 
     def test_01_create_conversation_stream_message(self) -> None:
         pass
+
+    def test_02_read_conversation_stream_message(self) -> None:
+        pass
