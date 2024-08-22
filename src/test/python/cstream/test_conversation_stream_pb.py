@@ -78,27 +78,25 @@ class TestSerDePb(unittest.TestCase):
         doc_source: str = msg.doc_source
         assert doc_source == f"doc_source{i}"
 
-#    def test_03_read_conversation_stream_message(self, i: int = 0) -> None:
-#        msg: ConversationStreamMessage = ConversationStreamMessage()
-#        msg.ParseFromString(TestSerDePb.buf)
-#        packed_data = msgpack.packb(msg)
+    #    def test_03_read_conversation_stream_message(self, i: int = 0) -> None:
+    #        msg: ConversationStreamMessage = ConversationStreamMessage()
+    #        msg.ParseFromString(TestSerDePb.buf)
+    #        packed_data = msgpack.packb(msg)
 
+    def test_03_many(self, n: int = 1_000_000) -> None:
+        test: TestSerDePb = TestSerDePb()
+        start: int = time.time_ns()
+        for i in range(n):
+            test.test_01_create_conversation_stream_message(i)
+            test.test_02_read_conversation_stream_message(i)
 
-def run_many(n: int) -> None:
-    test: TestSerDePb = TestSerDePb()
-    start: int = time.time_ns()
-    for i in range(n):
-        test.test_01_create_conversation_stream_message(i)
-        test.test_02_read_conversation_stream_message(i)
-
-    took: int = (time.time_ns() - start) // 1_000_000
-    print(
-        f"Took: {took} ms {1000*n/took} msg/s "
-        f" message size: {len(TestSerDePb.buf)}"
-    )
+        took: int = (time.time_ns() - start) // 1_000_000
+        print(
+            f"Took: {took} ms {1000*n/took} msg/s "
+            f" message size: {len(TestSerDePb.buf)}"
+        )
 
 
 if __name__ == "__main__":
-    run_many(1_000_000)
-    TestSerDePb.file_result = True
+    # TestSerDePb.file_result = True
     unittest.main()
