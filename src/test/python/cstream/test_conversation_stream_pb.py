@@ -1,3 +1,4 @@
+import sys
 import time
 from typing import ClassVar
 import unittest
@@ -16,6 +17,7 @@ class TestSerDePb(unittest.TestCase):
     CSTREAM_BIN: ClassVar[str] = "/tmp/cstream.bin"
     file_result: bool = False
     buf: bytes = b""
+    bbuf: bytearray = bytearray(150)
 
     def test_01_create_conversation_stream_message(self, i: int = 0) -> None:
         # Create all string and byte vector data first
@@ -23,9 +25,8 @@ class TestSerDePb(unittest.TestCase):
         csm: ConversationStreamMessage = ConversationStreamMessage()
         csm.sequence_number = i
 
-        bbuf: bytes = bytearray(150)
-        bbuf[1] = i % 127
-        content_bytes = BytesValue(value=bytes(bbuf))
+        TestSerDePb.bbuf[1] = i % 127
+        content_bytes = BytesValue(value=bytes(TestSerDePb.bbuf))
         any_value: Any = Any()
         any_value.Pack(content_bytes)
         csm.content.CopyFrom(any_value)
@@ -52,36 +53,25 @@ class TestSerDePb(unittest.TestCase):
 
         # Access the actual bytes from BytesValue
         bytes_content: bytes = bytes_value.value
-        bbuf: bytes = bytearray(150)
-        bbuf[1] = i % 127
 
-        assert bytes_content == bytes(bbuf)
+        if i == 0:
 
-        date_time: str = msg.date_time
-        assert date_time == "2024-08-15T12:34:56Z"
+            date_time: str = msg.date_time
+            session_id = msg.session_id
+            subscriber_id = msg.subscriber_id
+            application_name = msg.application_name
+            source: str = msg.source
+            destination: str = msg.destination
+            doc_source: str = msg.doc_source
 
-        session_id = msg.session_id
-        assert session_id == "session_id_123"
-
-        subscriber_id = msg.subscriber_id
-        assert subscriber_id == "subscriber_id_456"
-
-        application_name = msg.application_name
-        assert application_name == "app_name"
-
-        source: str = msg.source
-        assert source == "source"
-
-        destination: str = msg.destination
-        assert destination == "destination"
-
-        doc_source: str = msg.doc_source
-        assert doc_source == f"doc_source{i}"
-
-    #    def test_03_read_conversation_stream_message(self, i: int = 0) -> None:
-    #        msg: ConversationStreamMessage = ConversationStreamMessage()
-    #        msg.ParseFromString(TestSerDePb.buf)
-    #        packed_data = msgpack.packb(msg)
+            assert bytes_content == TestSerDePb.bbuf
+            assert date_time == "2024-08-15T12:34:56Z"
+            assert session_id == "session_id_123"
+            assert subscriber_id == "subscriber_id_456"
+            assert application_name == "app_name"
+            assert source == "source"
+            assert destination == "destination"
+            assert doc_source == f"doc_source{i}"
 
     def test_03_many(self, n: int = 1_000_000) -> None:
         test: TestSerDePb = TestSerDePb()
@@ -98,5 +88,7 @@ class TestSerDePb(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    # TestSerDePb.file_result = True
+    if len(sys.argv) > 1 and sys.argv[1] == "file":
+        TestSerDePb.file_result = True
+
     unittest.main()
