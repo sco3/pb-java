@@ -55,10 +55,10 @@ class TestSerDeMp(unittest.TestCase):
         for i in range(n):
             self.test_once(i)
 
-        time.sleep(0.001)
-        took: int = (time.time_ns() - start) // 1_000_000
+        took: float = (time.time_ns() - start) / 1_000_000
+        rate: int = int(1000 * n / took)
         print(
-            f"Took: {took} ms {1000*n/took} msg/s "
+            f"Took: {int(took)} ms {rate} msg/s "
             f" message size: {TestSerDeMp.message_size}"
         )
 
