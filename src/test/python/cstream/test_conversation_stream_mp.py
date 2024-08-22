@@ -46,6 +46,8 @@ class TestSerDeMp(unittest.TestCase):
         # print("Deserialized data (dict[int, Any]):", deserialized_data)
 
         TestSerDeMp.message_size = len(serialized_data)
+        if i == 0:
+            assert data_dict == deserialized_data
 
     def test_many(self, n: int = 1000000) -> None:
 
