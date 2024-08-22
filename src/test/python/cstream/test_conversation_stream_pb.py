@@ -94,7 +94,7 @@ def run_many(n: int) -> None:
     took: int = (time.time_ns() - start) // 1_000_000
     print(
         f"Took: {took} ms {1000*n/took} msg/s "
-        f" message size:{len(TestSerDePb.buf)}"
+        f" message size: {len(TestSerDePb.buf)}"
     )
 
 

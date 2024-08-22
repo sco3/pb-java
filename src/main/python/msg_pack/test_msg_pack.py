@@ -1,71 +1,83 @@
+""" 
+example of usage of message pack library with the structures for 
+conversation stream
+
+in order to compile with mypyc one needs msgpack-types
+
+For instance:
+
+poetry add msgpack-types [--dev] 
+
+"""
+
 import msgpack
 import datetime
+from typing import Any, Dict, ClassVar
+import time
 
+size: int = 0
 
 # Define enums for the fields of ConversationStreamMessage
-class MessageField:
-    SEQUENCE_NUMBER = 0
-    ANY = 1
-    CONTENT = 2
-    DATE_TIME = 3
-    SESSION_ID = 4
-    SUBSCRIBER_ID = 5
-    APPLICATION_NAME = 6
-    MESSAGE_TYPE = 7
-    SOURCE = 8
-    DESTINATION = 9
-    DOC_SOURCE = 10
+class ConversationStreamMessageField:
+    SEQUENCE_NUMBER: ClassVar[int] = 0
+    ANY: ClassVar[int] = 1
+    CONTENT: ClassVar[int] = 2
+    DATE_TIME: ClassVar[int] = 3
+    SESSION_ID: ClassVar[int] = 4
+    SUBSCRIBER_ID: ClassVar[int] = 5
+    APPLICATION_NAME: ClassVar[int] = 6
+    MESSAGE_TYPE: ClassVar[int] = 7
+    SOURCE: ClassVar[int] = 8
+    DESTINATION: ClassVar[int] = 9
+    DOC_SOURCE: ClassVar[int] = 10
 
 
 class ComponentType:
-    UNKNOWN = 0
-    TEXT = 1
-    IMAGE = 2
-
-
-# A function to serialize the structure using enums as keys (dict[int, any])
-def serialize_to_msgpack(data_dict):
-    # Serialize to msgpack
-    return msgpack.packb(data_dict)
-
-
-# A function to deserialize msgpack data back to dict[int, any]
-def deserialize_from_msgpack(packed_data):
-    # Unpack msgpack data
-    unpacked_data = msgpack.unpackb(packed_data, strict_map_key=False)
-
-    # The unpacked data will already be dict[int, any]
-    return unpacked_data
+    UNKNOWN: ClassVar[int] = 0
+    TEXT: ClassVar[int] = 1
+    IMAGE: ClassVar[int] = 2
 
 
 def run_once(i: int) -> None:
-    # Create a dictionary with enum values as keys (dict[int, any])
-    bbuf: bytes = bytearray(150)
-    bbuf[0] = 1
 
-    original_data = {
-        MessageField.SEQUENCE_NUMBER: 1,
-        MessageField.ANY: bbuf,
-        MessageField.CONTENT: b"Hello, this is a test",  # Stored as bytes
-        MessageField.DATE_TIME: "2024-08-15T12:34:56Z",  # Matching date_time from csm
-        MessageField.SESSION_ID: "session_id_123",  # Matching session_id from csm
-        MessageField.SUBSCRIBER_ID: "subscriber_id_456",  # Matching subscriber_id from csm
-        MessageField.APPLICATION_NAME: "app_name",  # Matching application_name from csm
-        MessageField.MESSAGE_TYPE: ComponentType.TEXT,  # Enum value for TEXT remains unchanged
-        MessageField.SOURCE: "source",  # Matching source from csm
-        MessageField.DESTINATION: "destination",  # Matching destination from csm
-        MessageField.DOC_SOURCE: "doc_source0",  # f"doc_source{i}" with i = 0 as an example
+    # test any data for "any" field
+    bbuf: bytearray = bytearray(150)
+    bbuf[0] = 1
+    # Create a dictionary with enum values as keys (dict[int, Any])
+    data_dict: Dict[int, Any] = {
+        ConversationStreamMessageField.SEQUENCE_NUMBER: i,
+        ConversationStreamMessageField.ANY: bbuf,
+        ConversationStreamMessageField.CONTENT: b"Hello, this is a test",
+        ConversationStreamMessageField.DATE_TIME: "2024-08-15T12:34:56Z",
+        ConversationStreamMessageField.SESSION_ID: "session_id_123",
+        ConversationStreamMessageField.SUBSCRIBER_ID: "subscriber_id_456",
+        ConversationStreamMessageField.APPLICATION_NAME: "app_name",
+        ConversationStreamMessageField.MESSAGE_TYPE: ComponentType.TEXT,
+        ConversationStreamMessageField.SOURCE: "source",
+        ConversationStreamMessageField.DESTINATION: "destination",
+        ConversationStreamMessageField.DOC_SOURCE: f"doc_source{i}",
     }
 
     # Serialize the dictionary to msgpack format
-    serialized_data = serialize_to_msgpack(original_data)
-    print("Serialized data (msgpack):", len(serialized_data))
+    serialized_data: bytes = msgpack.packb(data_dict)
+    # print("Serialized data (msgpack):", len(serialized_data))
 
-    # Deserialize the data back to dict[int, any]
-    deserialized_data = deserialize_from_msgpack(serialized_data)
-    print("Deserialized data (dict[int, any]):", deserialized_data)
+    # Deserialize the data back to dict[int, Any]
+    deserialized_data: dict[int, Any] = msgpack.unpackb(
+        serialized_data, strict_map_key=False
+    )
+    # print("Deserialized data (dict[int, Any]):", deserialized_data)
+
+    global size
+    size = len(serialized_data)
 
 
-# Example usage
-if __name__ == "__main__":
-    run_once(0)
+def run_many(n: int) -> None:
+
+    start: int = time.time_ns()
+    for i in range(n):
+        run_once(i)
+
+    time.sleep(0.001)
+    took: int = (time.time_ns() - start) // 1_000_000
+    print(f"Took: {took} ms {1000*n/took} msg/s " f" message size: {size}")
