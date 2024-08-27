@@ -5,6 +5,7 @@ import time
 from typing import Any, Dict, ClassVar
 import unittest
 
+import pytest
 import msgpack
 
 from msg_pack.msg_pack_conversation_stream import ComponentType
@@ -19,7 +20,7 @@ class TestSerDeMp(unittest.TestCase):
 
         # test any data for "any" field
         bbuf: bytearray = bytearray(150)
-        bbuf[0] = 1
+        bbuf[0] = i % 127
         # Create a dictionary with enum values as keys (dict[int, Any])
         data_dict: Dict[int, Any] = {
             ConversationStreamMessageField.SEQUENCE_NUMBER: i,
@@ -48,17 +49,17 @@ class TestSerDeMp(unittest.TestCase):
         TestSerDeMp.message_size = len(serialized_data)
         if i == 0:
             assert data_dict == deserialized_data
-
+            
+    @pytest.mark.repeat(3)
     def test_many(self, n: int = 1000000) -> None:
 
         start: int = time.time_ns()
         for i in range(n):
             self.test_once(i)
 
-        took: float = (time.time_ns() - start) / 1_000_000
-        rate: int = int(1000 * n / took)
+        took: int = (time.time_ns() - start) // 1_000_000
         print(
-            f"Took: {int(took)} ms {rate} msg/s "
+            f"Took: {took} ms {1000*n/took} msg/s "
             f" message size: {TestSerDeMp.message_size}"
         )
 

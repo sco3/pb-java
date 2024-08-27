@@ -18,6 +18,7 @@ numpy = "^2.0.1"
 msgpack = "^1.0.8"
 pytest = "^8.3.2"
 msgpack-types = "^0.3.0"
+pytest-repeat = "^0.9.3"
 
 
 [build-system]
