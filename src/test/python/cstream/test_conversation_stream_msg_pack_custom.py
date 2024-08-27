@@ -53,6 +53,9 @@ class TestCustomSerDeMp(unittest.TestCase):
         source: str = unpacker.unpack()
         destination: str = unpacker.unpack()
         doc_source: str = unpacker.unpack()
+        
+        # here we can create instance of ConversationStreamMessage
+        # but test is already slower than dicts no need to write further
 
     def test_many(self, n: int = 1000000) -> None:
 
