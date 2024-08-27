@@ -10,6 +10,7 @@ import msgpack
 
 from msg_pack.msg_pack_conversation_stream import ComponentType
 from msg_pack.msg_pack_conversation_stream import ConversationStreamMessageField
+from msg_pack.msg_pack_conversation_stream import ConversationStreamMessage
 
 
 class TestSerDeMp(unittest.TestCase):

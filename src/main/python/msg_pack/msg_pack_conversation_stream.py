@@ -30,6 +30,39 @@ class ConversationStreamMessageField:
     DESTINATION: ClassVar[int] = 9
     DOC_SOURCE: ClassVar[int] = 10
 
+class ComponentType:
+    UNKNOWN: ClassVar[int] = 0
+    TEXT: ClassVar[int] = 1
+    IMAGE: ClassVar[int] = 2
+
+
+class ConversationStreamMessage:
+    def __init__(
+        self,
+        sequence_number: int = 0, 
+        content: bytes = b"",
+        date_time: str = "", 
+        session_id: str = "",
+        subscriber_id: str = "", 
+        application_name: str = "",  
+        message_type: ComponentType = ComponentType.UNKNOWN,
+        source: str = "",  
+        destination: str = "",
+        doc_source: str = ""  
+    ) -> None:
+        # Initialize the instance variables
+        self.sequence_number = sequence_number
+        self.content = content
+        self.date_time = date_time
+        self.session_id = session_id
+        self.subscriber_id = subscriber_id
+        self.application_name = application_name
+        self.message_type = message_type
+        self.source = source
+        self.destination = destination
+        self.doc_source = doc_source
+
+
 
 class ComponentType:
     UNKNOWN: ClassVar[int] = 0
