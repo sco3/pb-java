@@ -1,24 +1,22 @@
-import datetime
-import datetime
-import time
+""" test for msgpack """
+
 import time
 from typing import Any, Dict, ClassVar
 import unittest
 
-import pytest
 import msgpack
 
 from msg_pack.msg_pack_conversation_stream import ComponentType
 from msg_pack.msg_pack_conversation_stream import ConversationStreamMessageField
-from msg_pack.msg_pack_conversation_stream import ConversationStreamMessage
 
 
 class TestSerDeMp(unittest.TestCase):
+    """test msgpack with unittest single time and many times for benchmark"""
 
     message_size: ClassVar[int] = 0
 
     def test_once(self, i: int = 0) -> None:
-
+        """test a single conversion to and from msg pack format"""
         # test any data for "any" field
         bbuf: bytearray = bytearray(150)
         bbuf[0] = i % 127
@@ -50,10 +48,9 @@ class TestSerDeMp(unittest.TestCase):
         TestSerDeMp.message_size = len(serialized_data)
         if i == 0:
             assert data_dict == deserialized_data
-            
-    @pytest.mark.repeat(3)
-    def test_many(self, n: int = 1000000) -> None:
 
+    def test_many(self, n: int = 1000000) -> None:
+        """benchmark test"""
         start: int = time.time_ns()
         for i in range(n):
             self.test_once(i)
