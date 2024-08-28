@@ -17,3 +17,4 @@
 /.pytest_cache/
 src/**/*cpython*.so
 scr/build
+/.venv/

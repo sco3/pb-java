@@ -9,7 +9,13 @@ dependencies = [
     "msgpack>=1.0.8",
     "msgpack-types>=0.3.0",
     "protobuf>=5.27.4",
+    "flatbuffers>=24.3.25",
 ]
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
 
 [tool.uv]
 dev-dependencies = [
@@ -20,6 +26,28 @@ dev-dependencies = [
     "pytest>=8.3.2",
     "mypy-protobuf>=3.6.0",
 ]
+
+[tool.poetry]
+name = "pb-java"
+version = "0.1.0"
+description = ""
+authors = []
+packages = [
+    { include = "src/main/python" }
+]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+flatbuffers = "^23.5.26"
+black = "^24.4.2"
+protobuf = "^5.27.3"
+mypy-protobuf = "^3.6.0"
+mypy = "^1.11.1"
+numpy = "^2.0.1"
+msgpack = "^1.0.8"
+pytest = "^8.3.2"
+msgpack-types = "^0.3.0"
+pytest-repeat = "^0.9.3"
 
 [tool.pytype]
 inputs = ['sco3','build/generated/source/proto/main/python']
