@@ -189,6 +189,15 @@ wheels = [
 ]
 
 [[package]]
+name = "nodeenv"
+version = "1.9.1"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/43/16/fc88b08840de0e0a72a2f9d8c6bae36be573e475a6326ae854bcc549fc45/nodeenv-1.9.1.tar.gz", hash = "sha256:6ec12890a2dab7946721edbfbcd91f3319c6ccc9aec47be7c7e6b7011ee6645f", size = 47437 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/d2/1d/1b658dbd2b9fa9c4c9f32accbfc0205d532c8c6194dc0f2a4c0428e7128a/nodeenv-1.9.1-py2.py3-none-any.whl", hash = "sha256:ba11c9782d29c27c70ffbdda2d7415098754709be8a7056d79a737cd901155c9", size = 22314 },
+]
+
+[[package]]
 name = "packaging"
 version = "24.1"
 source = { registry = "https://pypi.org/simple" }
@@ -224,6 +233,7 @@ dev = [
     { name = "mypy-protobuf" },
     { name = "pylint" },
     { name = "pyre" },
+    { name = "pyright" },
     { name = "pytest" },
 ]
 
@@ -242,6 +252,7 @@ dev = [
     { name = "mypy-protobuf", specifier = ">=3.6.0" },
     { name = "pylint", specifier = ">=3.2.6" },
     { name = "pyre", specifier = ">=1.12.5" },
+    { name = "pyright", specifier = ">=1.1.378" },
     { name = "pytest", specifier = ">=8.3.2" },
 ]
 
@@ -308,6 +319,18 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/0e/c5/0b106af91efcbf7280b7c935d8671bc315ab4665cedcfe12eb0715ada630/pyre-1.12.5-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:12a19c28373c2e6fbec38ca5326bdacf701606ee04d29eac3530078bf57e5aaa", size = 3095970 },
     { url = "https://files.pythonhosted.org/packages/30/bc/11f40a780a9c709c7ffc8d0afa764fb3650b49edbf54d0748314461e62c3/pyre-1.12.5-cp312-cp312-macosx_10_9_x86_64.whl", hash = "sha256:727f2823c8124275956a0e5a39dc11306a3bf9f7ec29c2c93386896b10bbbe5b", size = 5828524 },
     { url = "https://files.pythonhosted.org/packages/c1/86/8eb16c219b42c3f504f348315ede2c9935dde518cb4586f24eb56fb818ad/pyre-1.12.5-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:c514ea180e44061f118f2b6172452e8cf36d9de8cca48dd229c62a2228232e24", size = 3101608 },
+]
+
+[[package]]
+name = "pyright"
+version = "1.1.378"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "nodeenv" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/3d/f0/e8aa5555410d88f898bef04da2102b0a9bf144658c98d34872e91621ced2/pyright-1.1.378.tar.gz", hash = "sha256:78a043be2876d12d0af101d667e92c7734f3ebb9db71dccc2c220e7e7eb89ca2", size = 17486 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/38/c6/f0d4bc20c13b20cecfbf13c699477c825e45767f1dc5068137323f86e495/pyright-1.1.378-py3-none-any.whl", hash = "sha256:8853776138b01bc284da07ac481235be7cc89d3176b073d2dba73636cb95be79", size = 18222 },
 ]
 
 [[package]]
