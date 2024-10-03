@@ -28,8 +28,13 @@ repositories {
 
 dependencies {
     testImplementation "junit:junit:4.13.2"
+    
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.0'
+    
     implementation "com.google.protobuf:protobuf-java:4.27.0"
 	implementation 'com.google.flatbuffers:flatbuffers-java:23.5.26'
+	implementation 'org.msgpack:msgpack-core:0.9.8'
 }
 
 protobuf {
