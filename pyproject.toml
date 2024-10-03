@@ -12,6 +12,7 @@ dependencies = [
     "flatbuffers>=24.3.25",
     "boto3>=1.35.32",
     "boto3-stubs>=1.35.32",
+    "python-dotenv",
 ]
 
 [build-system]
@@ -54,6 +55,7 @@ pytest-repeat = "^0.9.3"
 pip = "^24.2"
 boto3 = "^1.35.32"
 boto3-stubs = "^1.35.32"
+python-dotenv = "^1.0.1"
 
 [tool.pytype]
 inputs = ['sco3','build/generated/source/proto/main/python']
