@@ -11,6 +11,7 @@ dependencies = [
     "protobuf>=5.27.4",
     "flatbuffers>=24.3.25",
     "boto3>=1.35.32",
+    "boto3-stubs>=1.35.32",
 ]
 
 [build-system]
@@ -52,6 +53,7 @@ msgpack-types = "^0.3.0"
 pytest-repeat = "^0.9.3"
 pip = "^24.2"
 boto3 = "^1.35.32"
+boto3-stubs = "^1.35.32"
 
 [tool.pytype]
 inputs = ['sco3','build/generated/source/proto/main/python']
