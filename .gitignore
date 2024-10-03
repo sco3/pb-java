@@ -18,3 +18,4 @@
 src/**/*cpython*.so
 scr/build
 /.venv/
+/.pytype/
