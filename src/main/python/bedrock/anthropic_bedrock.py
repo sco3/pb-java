@@ -3,7 +3,34 @@ import json
 import dotenv
 import os
 from botocore.response import StreamingBody
+import anthropic
 
+class AnthropicClient:
+    def __init__(self) -> None:
+        dotenv.load_dotenv("/app/.env")
+        # Initialize Anthropic client using the API key from environment variables
+        self.anthropic_client = anthropic.Client(api_key=os.getenv("ANTHROPIC_API_KEY"))
+
+    def call_claude(self, prompt: str) -> str:
+        result: str = ""
+        try:
+            model_id: str = "claude-2"  # Example for Claude 2, update with the specific model if needed
+
+            response = self.anthropic_client.completions.create(
+                model=model_id,
+                prompt=f"{anthropic.HUMAN_PROMPT} {prompt} {anthropic.AI_PROMPT}",
+                max_tokens_to_sample=512,
+                temperature=0,
+                stop_sequences=[anthropic.HUMAN_PROMPT]
+            )
+
+            # Extract the response text from the completion
+            result = response['completion']
+
+        except Exception as e:
+            print(f"ERROR: {e}")
+
+        return result
 
 class BedrockClient:
     def __init__(self) -> None:
