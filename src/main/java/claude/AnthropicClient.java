@@ -1,7 +1,11 @@
 package claude;
 
 import static java.lang.System.currentTimeMillis;
+import static java.lang.Thread.sleep;
+import static java.util.concurrent.Executors.newFixedThreadPool;
 import static software.amazon.awssdk.services.bedrockruntime.model.ContentBlock.fromText;
+
+import java.util.concurrent.ThreadPoolExecutor;
 
 import io.github.cdimascio.dotenv.Dotenv;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
@@ -9,6 +13,7 @@ import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.bedrockruntime.BedrockRuntimeClient;
 import software.amazon.awssdk.services.bedrockruntime.model.ConversationRole;
+import software.amazon.awssdk.services.bedrockruntime.model.ConverseRequest;
 import software.amazon.awssdk.services.bedrockruntime.model.ConverseResponse;
 import software.amazon.awssdk.services.bedrockruntime.model.Message;
 
@@ -36,16 +41,15 @@ public class AnthropicClient {
 	}
 
 	public void request() {
-		String inputText = "What is the capital of France.";
+		String inputText = "What is the capital of England.";
 
-		Message message = Message.builder()//
-				.content(fromText(inputText))//
-				.role(ConversationRole.USER)//
-				.build();
+		Message message = Message.builder().content(fromText(inputText))
+				.role(ConversationRole.USER).build();
 
-		ConverseResponse response = mClient.converse(//
-				request -> request.modelId(mModelId).messages(message)//
-		);
+		var request = ConverseRequest.builder().modelId(mModelId)
+				.messages(message).build();
+
+		ConverseResponse response = mClient.converse(request);
 
 		String responseText = response.output().message().content().get(0)
 				.text();
@@ -53,19 +57,48 @@ public class AnthropicClient {
 
 	}
 
-	public static void main(String[] args) {
-		AnthropicClient cli = new AnthropicClient();
-		long start = currentTimeMillis();
-		int n = 10;
-		for (int i = 0; i < n; i++) {
-			cli.request();
+	private static class Batcher implements Runnable {
+		int mN = 0;
+
+		public Batcher(int n) {
+			mN = n;
 		}
 
+		public void run() {
+			AnthropicClient cli = new AnthropicClient();
+
+			for (int i = 0; i < mN; i++) {
+				cli.request();
+			}
+
+		}
+
+	}
+
+	public static void main(String[] args) {
+		int vUsers = 20;
+		int runs = 10;
+		long start = currentTimeMillis();
+		ThreadPoolExecutor svc = (ThreadPoolExecutor) newFixedThreadPool(
+				vUsers);
+		for (int i = 0; i < vUsers; i++) {
+			svc.execute(new Batcher(runs));
+		}
+
+		while (svc.getCompletedTaskCount() < vUsers) {
+			try {
+				sleep(1);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 		long end = currentTimeMillis();
 		long dur = end - start;
-		double reqs = n * 1000.0 / (end - start);
+		double reqs = runs * vUsers * 1000.0 / (end - start);
 		System.out.println( //
 				"Took: " + dur + " ms " + reqs + " req/s." //
 		);
+
 	}
+
 }
