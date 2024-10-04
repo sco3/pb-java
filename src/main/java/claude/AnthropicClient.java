@@ -1,6 +1,7 @@
 package claude;
 
 import static java.lang.System.currentTimeMillis;
+import static java.lang.System.out;
 import static java.lang.Thread.sleep;
 import static java.util.concurrent.Executors.newFixedThreadPool;
 import static software.amazon.awssdk.services.bedrockruntime.model.ContentBlock.fromText;
@@ -15,6 +16,7 @@ import software.amazon.awssdk.services.bedrockruntime.BedrockRuntimeClient;
 import software.amazon.awssdk.services.bedrockruntime.model.ConversationRole;
 import software.amazon.awssdk.services.bedrockruntime.model.ConverseRequest;
 import software.amazon.awssdk.services.bedrockruntime.model.ConverseResponse;
+import software.amazon.awssdk.services.bedrockruntime.model.InferenceConfiguration;
 import software.amazon.awssdk.services.bedrockruntime.model.Message;
 
 public class AnthropicClient {
@@ -41,20 +43,27 @@ public class AnthropicClient {
 	}
 
 	public void request() {
-		String inputText = "What is the capital of England.";
+		try {
+			String inputText = "What is the capital of England.";
 
-		Message message = Message.builder().content(fromText(inputText))
-				.role(ConversationRole.USER).build();
+			Message message = Message.builder().content(fromText(inputText))
+					.role(ConversationRole.USER).build();
 
-		var request = ConverseRequest.builder().modelId(mModelId)
-				.messages(message).build();
+			InferenceConfiguration cfg = InferenceConfiguration.builder()
+					.maxTokens(10).build();
+			var request = ConverseRequest.builder().modelId(mModelId)
+					.messages(message).inferenceConfig(cfg).build();
 
-		ConverseResponse response = mClient.converse(request);
+			// out.println("tokens:" + request.inferenceConfig().maxTokens());
 
-		String responseText = response.output().message().content().get(0)
-				.text();
-		System.out.println(responseText);
+			ConverseResponse response = mClient.converse(request);
 
+			String responseText = response.output().message().content().get(0)
+					.text();
+			out.println(responseText);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	private static class Batcher implements Runnable {
@@ -76,7 +85,7 @@ public class AnthropicClient {
 	}
 
 	public static void main(String[] args) {
-		int vUsers = 20;
+		int vUsers = 10;
 		int runs = 10;
 		long start = currentTimeMillis();
 		ThreadPoolExecutor svc = (ThreadPoolExecutor) newFixedThreadPool(

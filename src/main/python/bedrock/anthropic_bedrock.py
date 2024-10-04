@@ -1,36 +1,38 @@
-import boto3
 import json
-import dotenv
 import os
+
+from anthropic import AnthropicBedrock
+import boto3
 from botocore.response import StreamingBody
-import anthropic
+import dotenv
+import time
+
 
 class AnthropicClient:
     def __init__(self) -> None:
-        dotenv.load_dotenv("/app/.env")
-        # Initialize Anthropic client using the API key from environment variables
-        self.anthropic_client = anthropic.Client(api_key=os.getenv("ANTHROPIC_API_KEY"))
+        # dotenv.load_dotenv("/app/.env")
+        self.client = AnthropicBedrock(
+            # Authenticate by either providing the keys below or use the default AWS credential providers, such as
+            # using ~/.aws/credentials or the "AWS_SECRET_ACCESS_KEY" and "AWS_ACCESS_KEY_ID" environment variables.
+            aws_region="us-east-1",
+        )
 
     def call_claude(self, prompt: str) -> str:
         result: str = ""
+
         try:
-            model_id: str = "claude-2"  # Example for Claude 2, update with the specific model if needed
-
-            response = self.anthropic_client.completions.create(
-                model=model_id,
-                prompt=f"{anthropic.HUMAN_PROMPT} {prompt} {anthropic.AI_PROMPT}",
-                max_tokens_to_sample=512,
-                temperature=0,
-                stop_sequences=[anthropic.HUMAN_PROMPT]
+            message = self.client.messages.create(
+                model="anthropic.claude-3-haiku-20240307-v1:0",
+                max_tokens=256,
+                messages=[{"role": "user", "content": prompt}],
             )
-
-            # Extract the response text from the completion
-            result = response['completion']
+            print(message.content)
 
         except Exception as e:
             print(f"ERROR: {e}")
 
         return result
+
 
 class BedrockClient:
     def __init__(self) -> None:
@@ -52,8 +54,7 @@ class BedrockClient:
             model_id: str = "anthropic.claude-3-haiku-20240307-v1:0"
 
             data: dict = {
-                "anthropic_version": "bedrock-2023-05-31",
-                "max_tokens": 512,
+                "max_tokens": 10,
                 "messages": [{"role": "user", "content": prompt}],
                 "temperature": 0,
                 "top_p": 0,
@@ -78,14 +79,24 @@ class BedrockClient:
         return result
 
 
-def main() -> None:
-    dotenv.load_dotenv()  # Load environment variables from .env file
+def main_boto() -> None:
     client = BedrockClient()
-
-    # Call the model and print the result
     result = client.call_claude_bedrock("What is the capital of France?")
     print(result)
 
 
+def main_anthropic() -> None:
+    client: AnthropicClient = AnthropicClient()
+    start = time.time_ns()
+    n = 10
+    for i in range(n):
+        result = client.call_claude("What is the capital of France?")
+        print(result)
+    end = time.time_ns()
+    dur = (end - start) / 1000_000_000.0
+    reqs = n / dur
+    print(f"Took: {dur} s Req/s: {reqs} ")
+
+
 if __name__ == "__main__":
-    main()
+    main_anthropic()
