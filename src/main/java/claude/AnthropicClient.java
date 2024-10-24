@@ -87,8 +87,8 @@ public class AnthropicClient {
 	}
 
 	public static void main(String[] args) {
-		int vUsers = 10;
-		int batchSize = 1;
+		int vUsers = 32;
+		int batchSize = 32;
 		long start = currentTimeMillis();
 
 		ThreadPoolExecutor svc = (ThreadPoolExecutor) newFixedThreadPool( //
