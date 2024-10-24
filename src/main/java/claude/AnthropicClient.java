@@ -25,7 +25,6 @@ public class AnthropicClient {
 	private static final String mModelId = "anthropic.claude-3-haiku-20240307-v1:0";
 
 	public AnthropicClient() {
-		// Specify the credentials
 		Dotenv dotenv = Dotenv.load();
 		String awsAccessKeyId = dotenv.get("AWS_ACCESS_KEY_ID");
 		String awsSecretAccessKey = dotenv.get("AWS_SECRET_ACCESS_KEY");
@@ -46,15 +45,20 @@ public class AnthropicClient {
 		try {
 			String inputText = "What is the capital of England.";
 
-			Message message = Message.builder().content(fromText(inputText))
-					.role(ConversationRole.USER).build();
+			Message message = Message.builder() //
+					.content(fromText(inputText)) //
+					.role(ConversationRole.USER) //
+					.build();
 
 			InferenceConfiguration cfg = InferenceConfiguration.builder()
-					.maxTokens(10).build();
-			var request = ConverseRequest.builder().modelId(mModelId)
-					.messages(message).inferenceConfig(cfg).build();
+					.maxTokens(10) //
+					.build();
 
-			// out.println("tokens:" + request.inferenceConfig().maxTokens());
+			var request = ConverseRequest.builder() //
+					.modelId(mModelId)//
+					.messages(message)//
+					.inferenceConfig(cfg)//
+					.build();
 
 			ConverseResponse response = mClient.converse(request);
 
@@ -79,19 +83,20 @@ public class AnthropicClient {
 			for (int i = 0; i < mN; i++) {
 				cli.request();
 			}
-
 		}
-
 	}
 
 	public static void main(String[] args) {
 		int vUsers = 10;
-		int runs = 10;
+		int batchSize = 1;
 		long start = currentTimeMillis();
-		ThreadPoolExecutor svc = (ThreadPoolExecutor) newFixedThreadPool(
-				vUsers);
+
+		ThreadPoolExecutor svc = (ThreadPoolExecutor) newFixedThreadPool( //
+				vUsers //
+		);
+
 		for (int i = 0; i < vUsers; i++) {
-			svc.execute(new Batcher(runs));
+			svc.execute(new Batcher(batchSize));
 		}
 
 		while (svc.getCompletedTaskCount() < vUsers) {
@@ -103,11 +108,10 @@ public class AnthropicClient {
 		}
 		long end = currentTimeMillis();
 		long dur = end - start;
-		double reqs = runs * vUsers * 1000.0 / (end - start);
+		double reqs = batchSize * vUsers * 1000.0 / (end - start);
 		System.out.println( //
 				"Took: " + dur + " ms " + reqs + " req/s." //
 		);
-
+		svc.shutdown();
 	}
-
 }
